@@ -1,12 +1,14 @@
-import Form from "./Form";
+import axios from "axios";
+import { UserContextProvider } from "./assets/UserContext";
+import Main from "./Main";
 
 function App() {
+  axios.defaults.baseURL = "http://localhost:4000";
+  axios.defaults.withCredentials = true;
   return (
-    <div className="App">
-      <header className="App-header">
-        <Form />
-      </header>
-    </div>
+    <UserContextProvider>
+      <Main />
+    </UserContextProvider>
   );
 }
 

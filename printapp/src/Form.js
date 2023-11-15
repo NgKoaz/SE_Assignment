@@ -1,21 +1,68 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useContext, useState } from 'react'
+import UserContext from './assets/UserContext';
+import './index.css';
 
 const Form = () => {
-  return (
-    <div>
-        <form method="post">
-            <div class="txt_field">
-                <label>Username</label>
-                <input type="text" required />
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const {setUsername:setLoggedInUsername} = useContext(UserContext);
 
-                <label>Password</label>
-                <input type="password" required />
+  //Send form
+  async function handleSummit(event){
+    event.preventDefault();
+    const url = '/login';
+    const {data} = await axios.post(url, {username, password});
+    setLoggedInUsername(data.username);
+  }
+
+  return (
+    <div className="bg-blue-400 flex justify-center items-center h-screen w-screen">
+      <div className="w-1/4 p-6 shadow-1g bg-white rounded-lg">
+        <h1 className="text-4xl block text-center font-semibold">Login</h1>
+        <hr className="mt-3 mb-3"/>
+        <form method="post" onSubmit={handleSummit}>
+          <div>
+              <label for="username" className="block text-base mb-2">Username</label>
+              <input 
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Your username"
+                required 
+                className="border-2 w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600"
+                />
+              <br />
+              <label>Password</label>
+              <input 
+                type="Your Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="password"
+                required 
+                className="border-2 w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600"
+              />
+          </div>
+          <div className="mt-3 flex justify-between items-center">
+            <div>
+              <input type="checkbox" />
+              <label>Remember me</label>
             </div>
-            <div class="pass">
-                Forgot Password?
+            <div className="text-indigo-500 font-semibold">
+              Forgot Password?
             </div>
-            <input type="submit" value="Login" />
+          </div>
+          <div className="mt-5">
+            <input 
+                  type="submit"
+                  value="Login" 
+                  className="border-4 border-indigo-700 bg-indigo-700 text-white py-2 px-5 rounded-lg w-full hover:bg-transparent hover:text-indigo-700 font-semibold"
+            />
+          </div>
         </form>
+
+        
+      </div>
     </div>
   )
 }
