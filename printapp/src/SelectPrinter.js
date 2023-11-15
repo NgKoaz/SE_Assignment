@@ -4,6 +4,7 @@ const SelectPrinter = ({ step, setStep }) => {
     
     function handleForm(e){
         e.preventDefault()
+        console.log(e.target.value)
         if (e.target.value === 'back')
             setStep(step - 1)
         else {
@@ -12,8 +13,8 @@ const SelectPrinter = ({ step, setStep }) => {
     }
 
   return (
-    <div className="absolute top-1/4 left-1/4 w-1/2 h-2/3 flex justify-between ">
-        <form className="w-full" onClick={e => handleForm(e)}>
+    <div className="absolute top-1/4 left-1/4 w-1/2 h-2/3 ">
+        <form className="w-full" onSubmit={e => handleForm(e)}>
             <div className="bg-blue-100 rounded-lg p-3 w-full h-2/3">
                 <label className="text-xl font-semibold">Printer</label>
                 <select>
@@ -55,11 +56,6 @@ const SelectPrinter = ({ step, setStep }) => {
             </div>
             <div className="flex flex-row justify-around mt-5">
                 <button 
-                    value="back"
-                    className="bg-red-600 w-2/5 h-12 rounded-2xl text-white text-xl font-semibold">
-                    Quay về
-                </button >
-                <button 
                     value="continue"
                     className="bg-indigo-600 w-2/5 h-12 rounded-2xl text-white text-xl font-semibold">
                     
@@ -67,6 +63,11 @@ const SelectPrinter = ({ step, setStep }) => {
                 </button>
             </div>
         </form>
+        <button 
+            value="back"
+            className="bg-red-600 w-2/5 h-12 rounded-2xl text-white text-xl font-semibold">
+            Quay về
+        </button >
         
         
     </div> 

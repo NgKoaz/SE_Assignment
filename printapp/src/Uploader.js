@@ -30,8 +30,9 @@ const Uploader = ({ step, setStep }) => {
             onChange={({target: {files}}) => {
                 files[0] && setFileName(files[0].name)
                 if (files){
-                setFile(URL.createObjectURL(files[0]))
+                    setFile(URL.createObjectURL(files[0]))
                 }
+                console.log(file)
             }}
             />
 
@@ -49,7 +50,7 @@ const Uploader = ({ step, setStep }) => {
             <button 
             onClick={e => handleSubmit(e)}
             className="bg-indigo-600 h-1/2 w-1/4 text-xl font-semibold text-white rounded-2xl">
-            Tiếp tục
+                Tiếp tục
             </button>
         </div>
     </div>
