@@ -15,7 +15,7 @@ export function UserContextProvider({children}){
             }
             console.log(username);
         })
-    });
+    }, []);
 
     return(
         <UserContext.Provider value={{username, setUsername}}>

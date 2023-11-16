@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom'
 
 const PrintingConfirm = ({step, setStep}) => {
     const navigate = useNavigate()
-    function handleButton(e){
+    function handleClick(e){
         e.preventDefault()
-        const val = e.target.value
-        switch (val){
+        const clickedButton = e.target
+        switch (clickedButton.id){
             case "printing":
                 setStep(step + 1)
                 break
@@ -53,27 +53,28 @@ const PrintingConfirm = ({step, setStep}) => {
                 <label className="text-xl font-semibold">Còn lại</label>
                 <br />
             </div>
-            <div className="flex flex-col gap-2 items-center">
-                <form onSubmit={e => handleButton(e)}>
-                    <button 
-                        value="printing"
-                        className="bg-indigo-600 w-2/5 h-12 rounded-2xl text-white text-xl font-semibold">
-                            
-                        Tiến hành in
-                    </button>
-                    <button 
-                        value="buying"
-                        className="bg-purple-600 w-2/5 h-12 rounded-2xl text-white text-xl font-semibold">
-                        
-                        Mua thêm giấy
-                    </button>
-                    <button 
-                        value="back"
-                        className="bg-red-600 w-2/5 h-12 rounded-2xl text-white text-xl font-semibold">
-                        
-                        Quay về
-                    </button>
-                </form>
+            <div className="buttons flex flex-col gap-2 items-center">
+                <button 
+                    id="printing"
+                    onClick={e => handleClick(e)}
+                    className="bg-indigo-600 w-2/5 h-12 rounded-2xl text-white text-xl font-semibold">
+                    
+                    Tiến hành in
+                </button>
+                <button 
+                    id="buying"
+                    onClick={e => handleClick(e)}
+                    className="bg-purple-600 w-2/5 h-12 rounded-2xl text-white text-xl font-semibold">
+                    
+                    Mua thêm giấy
+                </button>
+                <button 
+                    id="back"
+                    onClick={e => handleClick(e)}
+                    className="bg-red-600 w-2/5 h-12 rounded-2xl text-white text-xl font-semibold">
+                    
+                    Quay về
+                </button>
             </div>
         </div>        
     </div>  

@@ -1,53 +1,49 @@
-import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
-import UserContext from './assets/UserContext'
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import UserContext from './assets/UserContext';
 import Logo from './Logo';
 import Avatar from './Avatar';
 import axios from 'axios';
 
 const NavBar = () => {
-    const {setUsername} = useContext(UserContext);
+    const { setUsername } = useContext(UserContext);
 
     const Logout = (e) => {
         e.preventDefault();
-        axios.post('/logout').then(() => {
+        axios
+        .post('/logout')
+        .then(() => {
             setUsername('');
+        })
+        .catch((error) => {
+            // Handle error safely
+            console.error(error);
         });
-        
-    }
+    };
 
   return (
-    <ul className="h-1/6 max-h-24  bg-white border-b-2 border-black grid grid-cols-6 gap-0">
-        
-        <Link className="" to="/">
+    <nav className="border-b-2 border-black">
+        <ul className="h-24 flex justify-center items-center">
             <li className="">
-                <Logo />
+                <Link to="/">
+                    <Logo />
+                </Link>
             </li>
-        </Link>
-        
-        <Link className="" to="/">
-            <li className="w-full h-full text-2xl font-semibold hover:bg-blue-300">
-                TRANG CHỦ
+            <li className="h-24 w-24 text-xl font-semibold">
+                <Link to="/">Trang chủ</Link>
             </li>
-        </Link>
-        <Link to="/printing">
-            <li className="w-full  h-full text-2xl font-semibold hover:bg-blue-300">
-                IN
+            <li className="h-24 w-24 text-xl font-semibold">
+                <Link to="/printing">In</Link>
             </li>
-        </Link>
-        <Link to="/buying">
-            <li className="w-full h-full text-2xl font-semibold hover:bg-blue-300">
-                MUA GIẤY
+            <li className="h-24 w-24 text-xl font-semibold">
+                <Link to="/buying">Mua giấy</Link>
             </li>
-        </Link>
-        <li className="w-full h-full text-2xl font-semibold hover:bg-blue-300">
-            <Avatar />
-        </li>
-        <li className="w-full h-full text-2xl font-semibold hover:bg-blue-300">
-            <button onClick={Logout}>Log out</button>
-        </li>
-    </ul>
-  )
-}
+            <li className="inline-block  h-full text-2xl font-semibold hover:bg-blue-300">
+                <button onClick={Logout}>Đăng xuất</button>
+            </li>
+        </ul>
+    </nav>
+  );
+};
 
-export default NavBar
+export default NavBar;

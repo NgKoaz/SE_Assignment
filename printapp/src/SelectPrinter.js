@@ -2,6 +2,21 @@ import React from 'react'
 
 const SelectPrinter = ({ step, setStep }) => {
     
+    function handleClick(e){
+        e.preventDefault()
+        const clickedButton = e.target
+
+        switch (clickedButton.id){
+            case "back":
+                setStep(step - 1)
+                break
+            case "continue":
+                setStep(step + 1)
+                break
+            default:
+        }
+    }
+
     function handleForm(e){
         e.preventDefault()
         console.log(e.target.value)
@@ -14,7 +29,7 @@ const SelectPrinter = ({ step, setStep }) => {
 
   return (
     <div className="absolute top-1/4 left-1/4 w-1/2 h-2/3 ">
-        <form className="w-full" onSubmit={e => handleForm(e)}>
+        <form className="w-full">
             <div className="bg-blue-100 rounded-lg p-3 w-full h-2/3">
                 <label className="text-xl font-semibold">Printer</label>
                 <select>
@@ -54,22 +69,21 @@ const SelectPrinter = ({ step, setStep }) => {
                     </li>
                 </ul>
             </div>
-            <div className="flex flex-row justify-around mt-5">
-                <button 
-                    value="continue"
-                    className="bg-indigo-600 w-2/5 h-12 rounded-2xl text-white text-xl font-semibold">
-                    
-                    Tiếp tục
-                </button>
-            </div>
         </form>
-        <button 
-            value="back"
-            className="bg-red-600 w-2/5 h-12 rounded-2xl text-white text-xl font-semibold">
-            Quay về
-        </button >
-        
-        
+        <div className="buttons flex flex-row justify-around mt-5">
+            <button 
+                id="back"
+                onClick={e => handleClick(e)}
+                className="bg-red-600 w-2/5 h-12 rounded-2xl text-white text-xl font-semibold">
+                Quay về
+            </button >
+            <button 
+                id="continue"
+                onClick={e => handleClick(e)}
+                className="bg-indigo-600 w-2/5 h-12 rounded-2xl text-white text-xl font-semibold">
+                Tiếp tục
+            </button>
+        </div>
     </div> 
   )
 }
