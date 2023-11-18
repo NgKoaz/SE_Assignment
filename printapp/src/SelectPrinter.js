@@ -1,10 +1,14 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import PrinterInfo from './PrinterInfo'
+import UserContext from './assets/UserContext'
 
 const SelectPrinter = ({ step, setStep }) => {
     const [numCopies, setNumCopies] = useState(1)
-    const [printer, setPrinter] = useState(null)
+    const [selectedPrinter, setSelectedPrinter] = useState(null)
     const [isAutoSelect, setIsAutoSelect] = useState(true)
+    const [error, setError] = useState('')
+
+    const { printerList } = useContext(UserContext)
 
     function handleSelectMethod(e){
         const clickedButton = e.target
@@ -12,7 +16,7 @@ const SelectPrinter = ({ step, setStep }) => {
         switch (clickedButton.id){
             case "auto-sel":
                 setIsAutoSelect(true)
-                setPrinter(null)
+                setSelectedPrinter(null)
                 break
             case "man-sel":
                 setIsAutoSelect(false)
@@ -30,6 +34,10 @@ const SelectPrinter = ({ step, setStep }) => {
                 setStep(step - 1)
                 break
             case "continue":
+                if (!isAutoSelect && !selectedPrinter){
+                    setError("Vui lòng chọn máy in")
+                    return
+                }
                 setStep(step + 1)
                 break
             default:
@@ -41,7 +49,7 @@ const SelectPrinter = ({ step, setStep }) => {
         <div className="relative top-10">
             <div className="flex gap-10">
                 <form className="w-500px font-mono">
-                    <div className="bg-blue-100 rounded-lg p-3 w-full">
+                    <div className="bg-blue-50 rounded-lg p-3 w-full shadow-2xl">
                         <div className="flex">
                             <label className="w-2/5 text-xl font-semibold place-self-center">Printer</label>
                             <ul className="flex gap-12">
@@ -51,9 +59,9 @@ const SelectPrinter = ({ step, setStep }) => {
                                         name="select_method" 
                                         id="auto-sel"
                                         checked={isAutoSelect}
-                                        onClick={e => handleSelectMethod(e)}
+                                        onChange={e => handleSelectMethod(e)}
                                     />
-                                    <label for="auto-sel" className="ml-2 text-lg">Tự động chọn</label>
+                                    <label htmlFor="auto-sel" className="ml-2 text-lg">Tự động chọn</label>
                                 </li>
                                 <li>
                                     <input 
@@ -61,9 +69,9 @@ const SelectPrinter = ({ step, setStep }) => {
                                         name="select_method" 
                                         id="man-sel"
                                         checked={!isAutoSelect}
-                                        onClick={e => handleSelectMethod(e)}
+                                        onChange={e => handleSelectMethod(e)}
                                     />
-                                    <label for="man-sel" className="ml-2 text-lg">Chọn thủ công</label>
+                                    <label htmlFor="man-sel" className="ml-2 text-lg">Chọn thủ công</label>
                                 </li>
                             </ul>
                         </div>
@@ -85,11 +93,11 @@ const SelectPrinter = ({ step, setStep }) => {
                             <ul className="flex gap-12">
                                 <li>
                                     <input type="radio" name="orientation" id="portrait" value="portrait" />
-                                    <label for="portrait" className="ml-2 text-lg">Dọc</label>
+                                    <label htmlFor="portrait" className="ml-2 text-lg">Dọc</label>
                                 </li>
                                 <li>
                                     <input type="radio" name="orientation" id="landscape" value="landscape" />
-                                    <label for="landscape" className="ml-2 text-lg">Ngang</label>
+                                    <label htmlFor="landscape" className="ml-2 text-lg">Ngang</label>
                                 </li>
                             </ul>
                         </div>
@@ -99,63 +107,44 @@ const SelectPrinter = ({ step, setStep }) => {
                             <ul className="flex gap-12">
                                 <li>
                                     <input type="radio" name="paper-size" id="a4" value="a4" />
-                                    <label for="a4" className="ml-2 text-lg">A4</label>
+                                    <label htmlFor="a4" className="ml-2 text-lg">A4</label>
                                 </li>
                                 <li>
                                     <input type="radio" name="paper-size" id="a3" value="a3" />
-                                    <label for="a3" className="ml-2 text-lg">A3</label>
+                                    <label htmlFor="a3" className="ml-2 text-lg">A3</label>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </form>
             
-                <div className={`h-116 w-850px bg-blue-100 rounded-xl grid grid-cols-2 border-4 border-blue-100 overflow-y-auto ${isAutoSelect ? "opacity-50 pointer-events-none" : ""}`}>
-                    <PrinterInfo 
-                        id={"H6-101-1"}
-                        printer={printer}
-                        setPrinter={setPrinter}
-                    />
-                    <PrinterInfo 
-                        id={"H6-101-2"}
-                        printer={printer}
-                        setPrinter={setPrinter}
-                    />
-                    <PrinterInfo 
-                        id={"H6-101-3"}
-                        printer={printer}
-                        setPrinter={setPrinter}
-                    />
-                    <PrinterInfo 
-                        id={"H6-101-4"}
-                        printer={printer}
-                        setPrinter={setPrinter}
-                    />
-                    <PrinterInfo 
-                        id={"H6-101-5"}
-                        printer={printer}
-                        setPrinter={setPrinter}
-                    />
-                    <PrinterInfo 
-                        id={"H6-101-6"}
-                        printer={printer}
-                        setPrinter={setPrinter}
-                    />
+                <div className={`h-450px w-850px bg-blue-50 rounded-xl grid grid-cols-2 shadow-2xl overflow-y-auto border-2 border-blue-50 ${isAutoSelect ? "opacity-50 pointer-events-none" : ""}`}>
+                    {printerList.length > 0 && printerList.map(printer => (
+                        <PrinterInfo 
+                            key={printer.id}
+                            id={printer.id} 
+                            isActive={printer.isActive}
+                            paperEstimate={printer.paperEstimate}
+                            numUsing={printer.numUsing}
+                            selectedPrinter={selectedPrinter}
+                            setSelectedPrinter={setSelectedPrinter}
+                        />
+                    ))}
                 </div>
             </div>
-
+            {error && <p className="pt-5 text-lg font-semibold text-red-500 text-right">{error}</p>}
             <div>
-                <div className="buttons flex flex-row justify-around mt-20">
+                <div className="buttons flex justify-between mt-8">
                     <button 
                         id="back"
                         onClick={e => handleClick(e)}
-                        className="bg-red-600 w-2/5 h-12 rounded-2xl text-white text-xl font-semibold">
+                        className="bg-red-600 w-1/6 h-12 rounded-2xl text-white text-xl font-semibold hover:opacity-70">
                         Quay về
                     </button >
                     <button 
                         id="continue"
                         onClick={e => handleClick(e)}
-                        className="bg-indigo-600 w-2/5 h-12 rounded-2xl text-white text-xl font-semibold">
+                        className="bg-indigo-600 w-1/6 h-12 rounded-2xl text-white text-xl font-semibold hover:opacity-70">
                         Tiếp tục
                     </button>
                 </div>

@@ -1,11 +1,10 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
 const Logo = () => {
     return (
-        <Link to='/'>
-            Logo_BKPrinter
-        </Link>
+        <span className="inline-block">
+            <img src="./logo_bk.png" alt="Logo Bách Khoa" className="h-14" />
+        </span>
     )
 }
 

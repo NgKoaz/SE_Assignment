@@ -40,7 +40,7 @@ app.get('/profile', (req, res) => {
 
 app.post('/login', (req, res) => {
     const {username, password} = req.body;
-    if (username === "khoa"){
+    if (username !== ""){
         jwt.sign({username}, jwtSecret, {}, (err, token) => {
             res.cookie('token', token, {
                 httpOnly: true,
