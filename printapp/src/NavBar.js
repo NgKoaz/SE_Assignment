@@ -6,7 +6,7 @@ import Logo from './Logo';
 import axios from 'axios';
 
 const NavBar = () => {
-    const { setUsername } = useContext(UserContext);
+    const { username, setUsername } = useContext(UserContext);
 
     const Logout = (e) => {
         e.preventDefault();
@@ -56,14 +56,15 @@ const NavBar = () => {
         <div className="flex items-center mr-24">
             <div className="p-5 flex flex-col justify-around text-base font-semibold">
                 <div className="">
-                    Nguyễn Đăng Khoa
+                    {username}
                 </div>
                 <div className="text-green-500">
                     Còn lại: 50 trang
                 </div>
                 <button 
                     onClick={Logout}
-                    className="w-24 bg-gray-500 rounded-xl text-center text-white"
+                    className="w-24 bg-gray-500 rounded-xl text-center text-white hover:opacity-70"
+
                 >
                     Đăng xuất
                 </button>
