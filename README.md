@@ -129,7 +129,7 @@ Mô tả:
 - Nếu đúng với nhu cầu của người dùng thì người dùng tiến hành bấm nút “Xác nhận in” để chuyển đến hoạt động tiếp theo là hệ thống sẽ “Gửi yêu cầu in” đến máy in, lúc này máy in tiến hành in
   * Nếu in thành công, thì hệ thống sẽ “Cập nhật lại số dư giấy in” của người dùng rồi sau đó “Ghi nhận lịch sử in” rồi kết thúc hoạt động
   * Nếu in không thành công thì hệ thống sẽ chỉ “Ghi nhận lịch sử in” rồi kết thúc hoạt động.
-\
+
 #### Buy Papers use-case:
 \
 ![image](https://github.com/NgKoaz/SE_Assignment/assets/146020231/52808491-84c6-4c99-a46c-d2284b9a614c)
@@ -148,7 +148,7 @@ hóa đơn mua của người dùng.
 
 ### 2.2 Sequence Diagram    
 #### Print Documents Use-case:
-![2 2](https://github.com/NgKoaz/SE_Assignment/assets/146020231/ab93c372-6972-4a89-a00b-d4b29355cc73)
+![2 2](https://github.com/NgKoaz/SE_Assignment/assets/146020231/ab93c372-6972-4a89-a00b-d4b29355cc73) \
 Mô tả: 
 - Khi bắt đầu vào chế độ in, hệ thống mặc định sẽ cho phép người dùng tải tệp tin mới. Nếu người dùng muốn sử dụng lại những tệp tin đã tải lên hệ thống trước đó thì hệ thống có thể đưa ra danh sách những tệp tin cũ để người dùng có thể chọn lựa.
 - Hệ thống sẽ tự chọn máy in cho người dùng. Người dùng vẫn có thể chọn máy in khác nếu không muốn sử dụng máy in hệ thống chọn tự động. Khi đó hệ thống sẽ trả về trạng thái của các máy in và đợi người dùng đưa ra đề nghị chọn máy in.
@@ -157,8 +157,8 @@ Mô tả:
 - Hệ thống sẽ kiểm tra lại yêu cầu in của người dùng và đối chiếu với số giấy hiện có.
   * Nếu người dùng đủ giấy thì hệ thống sẽ gửi yêu cầu tới máy in được chỉ định, máy in thực hiện in và trả về trạng thái in với hệ thống. Sau khi lưu lại lịch sử in thì hệ thống sẽ thông báo về người dùng.
   * Nếu người dùng không đủ giấy, hệ thống sẽ gửi yêu cầu mua giấy. Người dùng đồng ý mua giấy sẽ được chuyển đến Buy Paper use-case.
-##### Buy Papers Use-case
-![2 2a](https://github.com/NgKoaz/SE_Assignment/assets/146020231/68585b41-4858-47df-b381-d21227ad31b2)
+#### Buy Papers Use-case
+![2 2a](https://github.com/NgKoaz/SE_Assignment/assets/146020231/68585b41-4858-47df-b381-d21227ad31b2) \
 Mô tả:
 - Sau khi người dùng chọn chức năng Mua thêm giấy, hệ thống sẽ yêu cầu người dùng nhập số lượng giấy cần mua và xác nhận mua.
 - Trước khi chuyển thông tin đơn hàng đến BKPay thì hệ thống sẽ thực hiện kiểm tra số lượng giấy người dùng nhập vào có hợp lệ không.
@@ -200,6 +200,63 @@ Mô tả: \
 Có 4 component chính là User, PrintRequest, PrintService và PrintHistory. Cũng như module Buy Paper thì việc tiến hành yêu cầu in ấn này (component PrintRequest) sẽ cần biết thông tin về người đang thực hiện in ấn thông qua chính tài khoản của họ. Sau khi đã thực hiện đầy đủ các bước như tải tài liệu lên và thiết lập xong cấu hình in ấn thì người dùng sẽ bấm nút xác nhận in, cũng chính là provide cho component PrintService. Sau khi đã nhận được yêu cầu xác nhận in thì component PrintService sẽ thực hiện việc in ấn tài liệu đã được yêu cầu và sau đó tiến hành lưu lại thông tin in ấn của User (component PrintHistory).
 
 
+## Task 4: Implementation - Sprint 1
+### 4.1: Thiết lập không gian làm việc và quản lý
+Nhóm đã thống nhất chọn Github làm àm nền tảng quản lý và phát triển dự án. \
+Workspace của nhóm: https://github.com/NgKoaz/SE_Assignment 
 
+### 4.2: Thêm các tệp chứa, thư mục chứa, tài liệu vào dự án
+![image](https://github.com/NgKoaz/SE_Assignment/assets/146020231/b51cc762-b8b1-4de8-9759-d67f0c8d4caa) \
+Kho chứa của nhóm gồm các thư mục sau:
+- document: folder chứa các tài liệu liên quan đến Requirement, System modelling, Architectural design của dự án
+- pic: folder chứa các file hình ảnh liên quan của dự án
+- printapp: mã nguồn hiện thực dự án
+
+### 4.3: Tiến hành kiểm thử với giao diện người dùng đã phát triển
+#### Các người thực hiện kiểm thử (Tester):
+Vì giới hạn về mặt thời gian và nhân lực phát triển phần mềm nên nhóm dự án lựa chọn phương án tuyển những người tham gia là những người bạn bè của các thành viên trong nhóm. Qua quá trình tuyển chọn, nhóm chọn được 29 tester là những sinh viên, có trình độ sử dụng máy tính cơ bản và đã từng sử dụng các ứng dụng, dịch vụ in ấn.
+
+#### Mô tả sơ lược công việc của các Tester:
+- Công việc 1: Kiểm tra thông tin trên trang chủ
+- Công việc 2: Kiểm tra chức năng In của phần mềm
+- Công việc 3: Kiểm tra chức năng Mua giấy của phần mềm
+
+#### Kế hoạch kiểm thử:
+Nhóm thống nhất lựa chọn phương pháp định lượng và remote thu thập feedback cũng như tiến hành test. Trong quá trình thực hiện bài test, các Testers được yêu cầu record lại quá trình thực hiện của mình. Sau đó gửi link video lại cho nhóm và tiếp tục làm thêm 1 khảo sát thông qua Google Form. Khảo sát này sẽ các câu hỏi liên quan đến mức độ hài lòng, đánh giá, góp ý,... Từ đó nhóm sẽ phân tích và đánh giá những thông tin thu thập được và cải tiến lại UI. 
+
+Phương pháp Định lượng: nhóm thu thập đánh giá theo thang điểm từ 1 → 5 (1 là thấp nhất và 5 là cao nhất), các thông số như thời gian hoàn thành tasks, mức độ hoàn thành cũng như là các vấn đề liên quan đến việc đánh giá giao diện của nhóm cũng như mức độ dễ sử dụng của các tính năng,... 
+
+Remote: UI sẽ được gửi cho Testers và Testers sẽ tiến hành thực hiện các tasks từ xa. Trong quá trình thực hiện Testers cần record lại quá trình thực hiện.
+
+#### Kết quả kiểm thử:
+- Đánh giá mức độ hoàn thành các công việc \
+  Các mức từ 1 - 5 được biểu diễn bằng chữ như sau: \
+  1: Hoàn thành rất ít, công việc chỉ hoàn thành được dưới 10% nhiệm vụ đề ra. \
+  2: Hoàn thành ít, công việc hoàn thành được khoảng từ 10% đến dưới 40% nhiệm vụ đề ra. \
+  3: Hoàn thành chưa đầy đủ, công việc hoàn thành được khoảng từ 40% đến dưới 70% nhiệm vụ đề ra. \
+  4: Hoàn thành tương đối, công việc hoàn thành được khoảng từ 70% đến dưới 95% nhiệm vụ đề ra. \
+  5: Hoàn thành tốt, công việc hoàn thành được 95% đến 100% nhiệm vụ đề ra. \
+ ![chart1](https://github.com/NgKoaz/SE_Assignment/assets/146020231/bf262607-303e-4465-b4d3-06096c8192ce) 
+ ![chart2](https://github.com/NgKoaz/SE_Assignment/assets/146020231/22e5d564-c6b2-4901-8943-a96bf4e49fa6) 
+ ![chart3](https://github.com/NgKoaz/SE_Assignment/assets/146020231/3e6d3df4-41f3-4d6d-8800-aee39894a664) \
+Nhận xét: Các công việc có mức độ hoàn thành tương đối khả quan.
+- Đánh giá về công việc khiến người dùng mất nhiều thời gian nhất: \
+  ![pie](https://github.com/NgKoaz/SE_Assignment/assets/146020231/133c09ac-8548-4195-8d36-d641e8cc1c23) \
+  Nhận xét:
+  * Công việc 3 khiến người dùng mất nhiều thời gian nhất.
+  * Thời gian người dùng thao tác ở công việc 1 và 2 tương đối thấp.
+- Đánh giá mức độ hài lòng của người dùng về giao diện của phần mềm: \
+   ![pie1](https://github.com/NgKoaz/SE_Assignment/assets/146020231/b5af3be7-220d-4ee9-a430-8c694dd9d6b7) \
+  Nhận xét:
+  * Đa số các Tester cảm thấy rất thích giao diện mà nhóm đã thiết kế.
+  * Có một số ít cho rằng giao diện sẽ rất khó thực hiện vì có nhiều chi tiết khá cầu kì.
+
+- Đánh giá mức độ đơn giản trong việc sử dụng phần mềm: \
+  ![pie2](https://github.com/NgKoaz/SE_Assignment/assets/146020231/a65d4db1-41f9-46bb-ad15-6278969910a8) \
+  Nhận xét:
+  * Phần lỡn các Tester cảm thấy giao diện rất phổ thông và dễ sử dụng, không có quá nhiều chi tiết khó hiểu.
+  * Vẫn còn một số ít cho rằng giao diện khó thao tác.
+
+  
 
 
