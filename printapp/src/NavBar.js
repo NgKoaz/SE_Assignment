@@ -6,24 +6,16 @@ import Logo from './Logo';
 import axios from 'axios';
 
 const NavBar = () => {
-    const { username, setUsername } = useContext(UserContext);
+    const { username, setUsername, setToken } = useContext(UserContext);
 
     const Logout = (e) => {
         e.preventDefault();
-        axios
-        .post('/logout')
-        .then(() => {
-            setUsername('');
-        })
-        .catch((error) => {
-            // Handle error safely
-            console.error(error);
-        });
+        setToken('');
     };
 
 
   return (
-    <nav className="h-20 w-full sticky top-0 flex justify-between border-b-2 border-black bg-gray-200">
+    <nav className="h-20 w-full sticky top-0 flex justify-between border-b-2 border-black bg-gray-200 z-20">
         <div className="flex ">
             <div className="ml-20 mr-10 px-2 py-2">
                 <Logo />

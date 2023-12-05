@@ -2,10 +2,14 @@ import React, { useContext, useState } from 'react'
 import PrinterInfo from './PrinterInfo'
 import UserContext from './assets/UserContext'
 
-const SelectPrinter = ({ step, setStep }) => {
-    const [numCopies, setNumCopies] = useState(1)
-    const [selectedPrinter, setSelectedPrinter] = useState(null)
-    const [isAutoSelect, setIsAutoSelect] = useState(true)
+const SelectPrinter = ({ 
+        step, setStep, numCopies, setNumCopies, 
+        selectedPrinter, setSelectedPrinter, 
+        isAutoSelect, setIsAutoSelect,
+        orientation, setOrientation,
+        size, setSize
+    }) => {
+
     const [error, setError] = useState('')
 
     const { printerList } = useContext(UserContext)
@@ -92,11 +96,11 @@ const SelectPrinter = ({ step, setStep }) => {
                             <label className="w-2/5 text-xl font-semibold place-self-center">Hướng giấy</label>
                             <ul className="flex gap-12">
                                 <li>
-                                    <input type="radio" name="orientation" id="portrait" value="portrait" />
+                                    <input type="radio" name="orientation" id="portrait" value="portrait" checked={orientation === 'portrait'} onClick={e => {setOrientation('portrait')}} />
                                     <label htmlFor="portrait" className="ml-2 text-lg">Dọc</label>
                                 </li>
                                 <li>
-                                    <input type="radio" name="orientation" id="landscape" value="landscape" />
+                                    <input type="radio" name="orientation" id="landscape" value="landscape" checked={orientation === 'landscape'} onClick={e => {setOrientation('landscape')}}/>
                                     <label htmlFor="landscape" className="ml-2 text-lg">Ngang</label>
                                 </li>
                             </ul>
@@ -106,11 +110,11 @@ const SelectPrinter = ({ step, setStep }) => {
                             <label className="w-2/5 text-xl font-semibold place-self-center">Khổ giấy</label>
                             <ul className="flex gap-12">
                                 <li>
-                                    <input type="radio" name="paper-size" id="a4" value="a4" />
+                                    <input type="radio" name="paper-size" id="a4" value="a4" checked={size === 'A4'} onClick={e => setSize('A4')} />
                                     <label htmlFor="a4" className="ml-2 text-lg">A4</label>
                                 </li>
                                 <li>
-                                    <input type="radio" name="paper-size" id="a3" value="a3" />
+                                    <input type="radio" name="paper-size" id="a3" value="a3" checked={size === 'A3'} onClick={e => setSize('A3')} />
                                     <label htmlFor="a3" className="ml-2 text-lg">A3</label>
                                 </li>
                             </ul>

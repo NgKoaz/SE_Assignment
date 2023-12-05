@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import UserContext from './assets/UserContext';
 import History from './History'
 import Printing from './Printing'
@@ -9,9 +9,9 @@ import NavBar from './NavBar';
 import ErrorPage from './ErrorPage';
 
 const Main = () => {
-    const { username } = useContext(UserContext);
+    const { token } = useContext(UserContext);
 
-    if (username !== '') {
+    if (token) {
         return(
             <div className="h-screen">
                 <NavBar />

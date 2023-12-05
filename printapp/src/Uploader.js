@@ -1,13 +1,14 @@
 import React, { useContext, useState } from 'react'
 import { MdCloudUpload } from 'react-icons/md'
 import UserContext from './assets/UserContext'
+import axios from 'axios'
 
 const Uploader = ({ step, setStep, file, setFile }) => {
     
     const [selectedId, setSelectedId] = useState('')
     const [error, setError] = useState("")
     const [deleteId, setDeleteId] = useState(null)
-    const { fileList, setFileList } = useContext(UserContext)
+    const { fileList, setFileList, token } = useContext(UserContext)
 
     function handleSelection(e, id){
         e.preventDefault()
@@ -21,22 +22,26 @@ const Uploader = ({ step, setStep, file, setFile }) => {
     }
 
     function handleUpload(e){
-        e.preventDefault()
-        if (!e.target.files[0]) return
-        const fileName = e.target.files[0].name
-        const fileType = fileName.split(".").pop()
-        const randomInteger = Math.floor(Math.random() * 10000)
+        e.preventDefault();
+        if (!e.target.files[0]) return;
 
-        setFileList(
-            [
-                {
-                    id: randomInteger,
-                    fileName,
-                    fileType
-                },
-                ...fileList
-            ]
-        )
+        const fileName = e.target.files[0].name
+
+        const formData = new FormData();
+        formData.append('file', e.target.files[0])
+
+        axios.post('/file/upload', formData, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data', // Set content type to multipart/form-data
+            },
+        })
+        .then((res) => {
+            console.log("File uploaded successfully");
+        })
+        .catch((err) => {
+            console.error("Error uploading file:", err);
+        })
     }
 
     function handleClick(e){
@@ -129,7 +134,7 @@ const Uploader = ({ step, setStep, file, setFile }) => {
                     <h3 className="text-xl text-gray-500 font-semibold mt-5 mb-3">File đã tải lên</h3>
                     <div className="pl-2 pr-2 h-80 overflow-y-auto border-2 border-gray-400 rounded-lg">
                         {fileList.length > 0 && fileList.map(fileInfo => (
-                            <FileBox key={fileInfo.id} id={fileInfo.id} fileName={fileInfo.fileName} fileType={fileInfo.fileType} />
+                            <FileBox key={fileInfo.id} id={fileInfo.id} fileName={fileInfo.fileName} fileType={fileInfo.fileName.split(".").pop()} />
                         ))}
                     </div>
                 </div>

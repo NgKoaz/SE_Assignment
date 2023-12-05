@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import axios from 'axios'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import UserContext from './assets/UserContext'
 
-const PrintingConfirm = ({step, setStep, file}) => {
+const PrintingConfirm = ({step, setStep, file, numCopies, orientation, size }) => {
     const [openConfModal, setOpenConfModal] = useState(false)
     const [openSucModal, setOpenSucModal] = useState(false)
+    const { token } = useContext(UserContext)
     const navigate = useNavigate()
 
     function handleClick(e){
@@ -23,6 +26,27 @@ const PrintingConfirm = ({step, setStep, file}) => {
             default:
                 navigate('/errorpage')
         }
+    }
+
+    function handleConfirmation(event){
+        setOpenConfModal(false)
+
+        axios.post('/order/create/', {
+            copies: numCopies
+        },
+        {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            
+        })
+        .catch(error => {
+           
+        })
+                                
+        setOpenSucModal(true)
     }
 
     function lineLayout(left_str, right_str){
@@ -56,11 +80,7 @@ const PrintingConfirm = ({step, setStep, file}) => {
                         </button>
                         <button
                             className="bg-blue-500 text-base font-bold text-white py-2 px-3 rounded-lg"
-                            onClick={e => {
-                                setOpenConfModal(false)
-                                
-                                setOpenSucModal(true)
-                            }}
+                            onClick={handleConfirmation}
                         >
                             Xác nhận in
                         </button>
@@ -104,12 +124,12 @@ const PrintingConfirm = ({step, setStep, file}) => {
 
             <div>
                 {lineLayout("Địa điểm máy in", "H6-105")}
-                {lineLayout("Hướng giấy", "Dọc")}
-                {lineLayout("Loại giấy", "A4")}
+                {lineLayout("Hướng giấy", (orientation === 'portrait') ? "Dọc" : "Ngang" )}
+                {lineLayout("Loại giấy", size)}
                 <hr className="mt-2 mb-2 border-gray-300" />
 
                 {lineLayout("Số lượng trang cho mỗi bản sao", "20")}
-                {lineLayout("Tổng số bản sao cần in", "5")}
+                {lineLayout("Tổng số bản sao cần in", numCopies)}
                 {lineLayout("Tổng số trang cần in", "100")}
                 {lineLayout("Tổng số trang hiện tại", "200")}
                 <hr className="mt-2 mb-2 border-gray-300" />
