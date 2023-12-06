@@ -5,164 +5,30 @@ const UserContext = createContext({});
 
 export function UserContextProvider({children}){
     const [username, setUsername] = useState('')
+    const [paper, setPaper] = useState(0)
     const [token, setToken] = useState('')
-    const [isContainToken, setIsContainToken] = useState(false)
     const [userInfo, setUserInfo] = useState(null)
     const [fileList, setFileList] = useState([])
     const [printerList, setPrinterList] = useState([])
     const [printHistList, setPrintHistList] = useState([])
     const [buyHistList, setBuyHistList] = useState([])
 
-    const fileListDef = [
-        {
-            id: 1,
-            fileName: "cc.pdf",
-            fileType: "pdf"
-        },
-        {
-            id: 2,
-            fileName: "haha.docx",
-            fileType: "docx"
-        },
-        {
-            id: 3,
-            fileName: "vatli.doc",
-            fileType: "doc"
-        },
-    ]
-
-    
-    
-    // const printerList = [
-    //     {
-    //         id: "H6-101-1",
-    //         isActive: true,
-    //         paperEstimate: 20,
-    //         numUsing: 10
-    //     },
-    //     {
-    //         id: "H6-101-2",
-    //         isActive: true,
-    //         paperEstimate: 50,
-    //         numUsing: 3 
-    //     },
-    //     {
-    //         id: "H6-101-3",
-    //         isActive: false,
-    //         paperEstimate: 100,
-    //         numUsing: 2 
-    //     },
-    //     {
-    //         id: "H6-101-4",
-    //         isActive: false,
-    //         paperEstimate: 10,
-    //         numUsing: 1
-    //     },
-    //     {
-    //         id: "H6-101-5",
-    //         isActive: false,
-    //         paperEstimate: 100,
-    //         numUsing: 2 
-    //     },
-    //     {
-    //         id: "H6-101-6",
-    //         isActive: true,
-    //         paperEstimate: 10,
-    //         numUsing: 1
-    //     },
-    // ]
-
-    // const printHistList = [
-    //     {
-    //         timestamp: "11:56:27 18/11/2023",
-    //         fileName: "cc.docx",
-    //         copies: 20,
-    //         printedPaper: 40,
-    //         remainingPaper: 20
-    //     },
-    //     {
-    //         timestamp: "11:56:27 18/11/2023",
-    //         fileName: "cc.docx",
-    //         copies: 20,
-    //         printedPaper: 40,
-    //         remainingPaper: 20
-    //     },
-    //     {
-    //         timestamp: "11:56:27 18/11/2023",
-    //         fileName: "cc.docx",
-    //         copies: 20,
-    //         printedPaper: 40,
-    //         remainingPaper: 20
-    //     },
-    //     {
-    //         timestamp: "11:56:27 18/11/2023",
-    //         fileName: "cc.docx",
-    //         copies: 20,
-    //         printedPaper: 40,
-    //         remainingPaper: 20
-    //     },
-    //     {
-    //         timestamp: "11:56:27 18/11/2023",
-    //         fileName: "cc.docx",
-    //         copies: 20,
-    //         printedPaper: 40,
-    //         remainingPaper: 20
-    //     },
-    //     {
-    //         timestamp: "11:56:27 18/11/2023",
-    //         fileName: "cc.docx",
-    //         copies: 20,
-    //         printedPaper: 40,
-    //         remainingPaper: 20
-    //     },
-    // ]
-
-    // const buyHistList = [
-    //     {
-    //         timestamp: "11:56:27 18/11/2023",
-    //         quantity: 20,
-    //         cost: 12000
-    //     },
-    //     {
-    //         timestamp: "11:56:27 11/11/2023",
-    //         quantity: 20,
-    //         cost: 12000
-    //     },
-    //     {
-    //         timestamp: "11:56:27 12/11/2023",
-    //         quantity: 20,
-    //         cost: 12000
-    //     },
-    //     {
-    //         timestamp: "11:56:37 18/11/2023",
-    //         quantity: 20,
-    //         cost: 12000
-    //     },
-    //     {
-    //         timestamp: "11:06:27 18/11/2023",
-    //         quantity: 20,
-    //         cost: 12000
-    //     },
-    //     {
-    //         timestamp: "11:56:37 18/11/2023",
-    //         quantity: 20,
-    //         cost: 12000
-    //     },
-    //     {
-    //         timestamp: "11:06:27 18/11/2023",
-    //         quantity: 20,
-    //         cost: 12000
-    //     },
-    // ]
-
-    useEffect(()=>{
-        setToken(localStorage.getItem('accessToken'))
-        
-    }, [])
 
     useEffect(() => {
-        if (!token) return;
-        let isError = false;
+        if (!userInfo) {
+            setUsername('') 
+            setPaper('')
+            return
+        }
+        setUsername(userInfo.userName) 
+        setPaper(userInfo.paper) 
+    }, [userInfo])
+
+    async function getUserInfo(){
+        if (!token) {
+            setUserInfo(null)
+            return
+        }
         axios.get('/user/', {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -173,11 +39,11 @@ export function UserContextProvider({children}){
                 setUserInfo(null);
             } else {
                 setUserInfo(response.data.user);
+                console.log(response.data.user)
+                console.log("Get user Info success");
             }
-            console.log("Get user Info success");
         })
         .catch(error => {
-            isError = true;
             if (error.response) {
             // Request đã được gửi, và server trả về status code không 2xx
                 console.error('Error response:', error.response.data);
@@ -190,12 +56,10 @@ export function UserContextProvider({children}){
                 console.error('Error setting up the request:', error.message);
             }
         })
-        if (isError) return;
+    }
 
-
-
-
-        // Load file List
+    async function loadFileList(){
+        if (!token) return
         axios.get('/file/get/', {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -207,42 +71,43 @@ export function UserContextProvider({children}){
             } else {
                 setFileList(response.data.list);
                 console.log(response.data.list);
+                console.log("File list success");
             }
-            console.log("File list success");
         })
         .catch(error => {
             if (error.response) {
                 console.error('Cannot load file list', error.message)
             }
         })
+    }
 
 
-
-        // Load printer list
-        axios.get('/file/get/', {
+    async function loadPrinterList(){
+        if (!token) return
+        axios.get('/printer/', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
         .then(response => {
             if (!response.data.list) {
-                console.log("File list hasn't found!")
+                console.log("Printer list hasn't found!")
             } else {
-                setFileList(response.data.list);
+                setPrinterList(response.data.list);
                 console.log(response.data.list);
+                console.log("Get printer successfully!")
             }
-            console.log("File list success");
         })
         .catch(error => {
             if (error.response) {
-                console.error('Cannot load file list', error.message)
+                console.error('Cannot load printer list', error.message)
             }
         })
+    }
 
 
-
-
-        // Load printing history list
+    async function loadPrintingHistList(){
+        if (!token) return
         axios.get('/order/history/', {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -254,20 +119,18 @@ export function UserContextProvider({children}){
             } else {
                 setPrintHistList(response.data.list);
                 console.log(response.data.list);
+                console.log("Get printing list success");
             }
-            console.log("Get printing list success");
         })
         .catch(error => {
             if (error.response) {
                 console.error('Cannot load printing list', error.message);
             }
         })
+    }
 
-
-
-
-
-        // Load buying history list
+    async function loadBuyingHistList(){
+        if (!token) return
         axios.get('/user/purchase-history/', {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -279,18 +142,42 @@ export function UserContextProvider({children}){
             } else {
                 setBuyHistList(response.data.list);
                 console.log(response.data.list);
+                console.log("Get buying list success");
             }
-            console.log("Get buying list success");
         })
         .catch(error => {
             if (error.response) {
                 console.error('Cannot load purchasing list', error.message);
             }
         })
+    }
+
+    useEffect(()=>{
+        setToken(localStorage.getItem('accessToken'))
+        
+    }, [])
+
+    useEffect(() => {
+        getUserInfo()
+
+        // Load file List
+        loadFileList()
+        // Load printer list
+        loadPrinterList()
+        // Load printing history list
+        loadPrintingHistList()
+        // Load buying history list
+        loadBuyingHistList()
     }, [token]);
 
     return(
-        <UserContext.Provider value={{ username, setUsername, fileList, setFileList, printerList, printHistList, buyHistList, isContainToken, setIsContainToken, token, setToken }}>
+        <UserContext.Provider value={{ 
+            username, setUsername, fileList, setFileList, 
+            printerList, printHistList, buyHistList, 
+            token, setToken,
+            loadFileList, loadBuyingHistList,
+            paper, getUserInfo
+        }}>
             {children}
         </UserContext.Provider>
     )

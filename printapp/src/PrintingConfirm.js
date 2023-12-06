@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import UserContext from './assets/UserContext'
 
-const PrintingConfirm = ({step, setStep, file, numCopies, orientation, size }) => {
+const PrintingConfirm = ({step, setStep, file, numCopies, orientation, size, selectedId }) => {
     const [openConfModal, setOpenConfModal] = useState(false)
     const [openSucModal, setOpenSucModal] = useState(false)
     const { token } = useContext(UserContext)
@@ -32,7 +32,11 @@ const PrintingConfirm = ({step, setStep, file, numCopies, orientation, size }) =
         setOpenConfModal(false)
 
         axios.post('/order/create/', {
-            copies: numCopies
+            printerId: 1,
+            fileId: selectedId,
+            copies: numCopies,
+            isPortrait: ((orientation === 'portrait') ? true : false),
+            isA4: ((size === 'A4') ? true : false),
         },
         {
             headers: {
@@ -40,7 +44,7 @@ const PrintingConfirm = ({step, setStep, file, numCopies, orientation, size }) =
             }
         })
         .then(response => {
-            
+            console.log("Print success")
         })
         .catch(error => {
            

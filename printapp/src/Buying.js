@@ -1,24 +1,38 @@
 import React, { useState } from 'react'
+import UserContext from './assets/UserContext'
+import { useContext } from 'react'
+import axios from 'axios'
 
 const Buying = () => {
-    const [numberPaper, setnumberPaper] = useState(null)
+    const [numberPaper, setnumberPaper] = useState('')
     const [error, setError] = useState("")
+    const { token, loadBuyingHistList, getUserInfo } = useContext(UserContext)
 
     function handleInput(e){
         const val = e.target.value
-        if (val > 10000) {
-            setError("Chỉ được mua 10000 trang cho mỗi lần giao dịch");
+        if (val > 5000) {
+            setError("Chỉ được mua tối đa 5000 trang cho mỗi lần giao dịch");
         } else {
             setnumberPaper(e.target.value)
             setError("")
         }
-            
     }
 
-    function handleClick(e){
+    async function handleClick(e){
         e.preventDefault()
-        const date = new Date()
-        console.log(date.toLocaleString("vi-VN"))
+        axios.post('/user/purchase', {paper: numberPaper}, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }).then((res) => {
+            console.log("Successfully!")
+            loadBuyingHistList()
+            setTimeout(getUserInfo, 10)
+        }).catch((err) => {
+            if (err.status === 500){
+                console.log("Server's error")
+            }
+        })
     }
 
     function getPriceStr(){
@@ -50,7 +64,7 @@ const Buying = () => {
                     {error && <p className="text-red-500 text-bases">{error}</p>}
                     <label className="text-base font-semibold">Hình thức thanh toán</label>
                     <div name="payment_method" className="flex justify-between border-2 bg-white w-32 p-2 mt-2 mb-4 border-black rounded-lg">
-                        <input type="checkbox" value="Momo" checked={true} />
+                        <input type="checkbox" value="Momo" defaultChecked />
                         <div>Momo</div>
                         <img src="./momo_logo.png" alt="Momo Pay" className="w-12 h-12" />
                     </div>

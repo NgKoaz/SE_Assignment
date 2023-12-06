@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import UserContext from './assets/UserContext';
 import Avatar from './Avatar'
 import Logo from './Logo';
-import axios from 'axios';
 
 const NavBar = () => {
-    const { username, setUsername, setToken } = useContext(UserContext);
+    const { username, paper, setToken, getUserInfo } = useContext(UserContext);
 
     const Logout = (e) => {
         e.preventDefault();
         setToken('');
+        getUserInfo();
     };
 
 
@@ -22,7 +22,7 @@ const NavBar = () => {
             </div>
             <ul className="flex justify-center">
                 <li className="h-full px-2 hover:bg-gray-300 flex items-center ">
-                    <Link className="h-full flex items-center" to="/">
+                    <Link className="h-full flex items-center" to="/" >
                         <div className="inline-block w-24 text-xl font-semibold text-center ">
                             In tài liệu
                         </div>
@@ -51,7 +51,7 @@ const NavBar = () => {
                     {username}
                 </div>
                 <div className="text-green-500">
-                    Còn lại: 50 trang
+                    Còn lại: {paper} trang
                 </div>
                 <button 
                     onClick={Logout}

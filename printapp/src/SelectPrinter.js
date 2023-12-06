@@ -14,21 +14,6 @@ const SelectPrinter = ({
 
     const { printerList } = useContext(UserContext)
 
-    function handleSelectMethod(e){
-        const clickedButton = e.target
-        
-        switch (clickedButton.id){
-            case "auto-sel":
-                setIsAutoSelect(true)
-                setSelectedPrinter(null)
-                break
-            case "man-sel":
-                setIsAutoSelect(false)
-                break
-            default:
-        }
-    }
-
     function handleClick(e){
         e.preventDefault()
         const clickedButton = e.target
@@ -63,7 +48,7 @@ const SelectPrinter = ({
                                         name="select_method" 
                                         id="auto-sel"
                                         checked={isAutoSelect}
-                                        onChange={e => handleSelectMethod(e)}
+                                        onChange={e => setIsAutoSelect(true)}
                                     />
                                     <label htmlFor="auto-sel" className="ml-2 text-lg">Tự động chọn</label>
                                 </li>
@@ -73,7 +58,7 @@ const SelectPrinter = ({
                                         name="select_method" 
                                         id="man-sel"
                                         checked={!isAutoSelect}
-                                        onChange={e => handleSelectMethod(e)}
+                                        onChange={e => setIsAutoSelect(false)}
                                     />
                                     <label htmlFor="man-sel" className="ml-2 text-lg">Chọn thủ công</label>
                                 </li>
@@ -96,11 +81,11 @@ const SelectPrinter = ({
                             <label className="w-2/5 text-xl font-semibold place-self-center">Hướng giấy</label>
                             <ul className="flex gap-12">
                                 <li>
-                                    <input type="radio" name="orientation" id="portrait" value="portrait" checked={orientation === 'portrait'} onClick={e => {setOrientation('portrait')}} />
+                                    <input type="radio" name="orientation" id="portrait" value="portrait" checked={orientation === 'portrait'} onChange={e => {setOrientation('portrait')}} />
                                     <label htmlFor="portrait" className="ml-2 text-lg">Dọc</label>
                                 </li>
                                 <li>
-                                    <input type="radio" name="orientation" id="landscape" value="landscape" checked={orientation === 'landscape'} onClick={e => {setOrientation('landscape')}}/>
+                                    <input type="radio" name="orientation" id="landscape" value="landscape" checked={orientation === 'landscape'} onChange={e => {setOrientation('landscape')}}/>
                                     <label htmlFor="landscape" className="ml-2 text-lg">Ngang</label>
                                 </li>
                             </ul>
@@ -110,11 +95,11 @@ const SelectPrinter = ({
                             <label className="w-2/5 text-xl font-semibold place-self-center">Khổ giấy</label>
                             <ul className="flex gap-12">
                                 <li>
-                                    <input type="radio" name="paper-size" id="a4" value="a4" checked={size === 'A4'} onClick={e => setSize('A4')} />
+                                    <input type="radio" name="paper-size" id="a4" value="a4" checked={size === 'A4'} onChange={e => setSize('A4')} />
                                     <label htmlFor="a4" className="ml-2 text-lg">A4</label>
                                 </li>
                                 <li>
-                                    <input type="radio" name="paper-size" id="a3" value="a3" checked={size === 'A3'} onClick={e => setSize('A3')} />
+                                    <input type="radio" name="paper-size" id="a3" value="a3" checked={size === 'A3'} onChange={e => setSize('A3')} />
                                     <label htmlFor="a3" className="ml-2 text-lg">A3</label>
                                 </li>
                             </ul>

@@ -6,6 +6,7 @@ import PrintingConfirm from './PrintingConfirm'
 const Printing = () => {
     const [step, setStep] = useState(1)
     const [file, setFile] = useState(null)
+    const [selectedId, setSelectedId] = useState('')
 
     const [numCopies, setNumCopies] = useState(1)
     const [selectedPrinter, setSelectedPrinter] = useState(null)
@@ -17,7 +18,11 @@ const Printing = () => {
     {
         case 1:
         return (
-            <Uploader step={step} setStep={setStep} file={file} setFile={setFile} />
+            <Uploader 
+                step={step} setStep={setStep} 
+                file={file} setFile={setFile} 
+                selectedId={selectedId} setSelectedId={setSelectedId}
+            />
         )
         case 2:
         return (

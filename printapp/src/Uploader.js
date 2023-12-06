@@ -3,12 +3,12 @@ import { MdCloudUpload } from 'react-icons/md'
 import UserContext from './assets/UserContext'
 import axios from 'axios'
 
-const Uploader = ({ step, setStep, file, setFile }) => {
+const Uploader = ({ step, setStep, file, setFile, selectedId, setSelectedId }) => {
     
-    const [selectedId, setSelectedId] = useState('')
+    
     const [error, setError] = useState("")
     const [deleteId, setDeleteId] = useState(null)
-    const { fileList, setFileList, token } = useContext(UserContext)
+    const { fileList, token, loadFileList } = useContext(UserContext)
 
     function handleSelection(e, id){
         e.preventDefault()
@@ -21,11 +21,30 @@ const Uploader = ({ step, setStep, file, setFile }) => {
         setDeleteId(id)
     }
 
+    async function requestDeletion(e){
+        e.preventDefault()
+        axios.delete(`/file/delete?id=${deleteId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }).then((res) => {
+            console.log(`Delete file ${deleteId} successfully!`)
+            loadFileList()
+        })
+        .catch((err) => {
+            if (err.status === 404) {
+                console.log("File not found")
+            } else {
+                console.log("Server's error")
+            }
+        })
+        setSelectedId(null)
+        setDeleteId(null)
+    }
+
     function handleUpload(e){
         e.preventDefault();
         if (!e.target.files[0]) return;
-
-        const fileName = e.target.files[0].name
 
         const formData = new FormData();
         formData.append('file', e.target.files[0])
@@ -37,7 +56,8 @@ const Uploader = ({ step, setStep, file, setFile }) => {
             },
         })
         .then((res) => {
-            console.log("File uploaded successfully");
+            console.log("File uploaded successfully")
+            loadFileList()
         })
         .catch((err) => {
             console.error("Error uploading file:", err);
@@ -95,12 +115,7 @@ const Uploader = ({ step, setStep, file, setFile }) => {
                         </button>
                         <button
                             className="bg-blue-500 text-base font-bold text-white py-2 px-3 rounded-lg"
-                            onClick={e => {
-                                e.preventDefault()
-                                setFileList(fileList.filter(file => file.id !== deleteId))
-                                setSelectedId(null)
-                                setDeleteId(null)
-                            }}
+                            onClick={requestDeletion}
                         >
                             Xác nhận xóa
                         </button>

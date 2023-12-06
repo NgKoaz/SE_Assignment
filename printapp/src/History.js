@@ -10,6 +10,20 @@ const History = () => {
         currency: 'VND'
     });
 
+    function paymentDate(str){
+        const dateObject = new Date(str)
+
+        const addLeadingZero = (number) => (number < 10 ? `0${number}` : number);
+
+        const day = addLeadingZero(dateObject.getDate());
+        const month = addLeadingZero(dateObject.getMonth() + 1); // Tháng bắt đầu từ 0
+        const year = dateObject.getFullYear();
+        const hours = addLeadingZero(dateObject.getHours());
+        const minutes = addLeadingZero(dateObject.getMinutes());
+        const seconds = addLeadingZero(dateObject.getSeconds());
+
+        return `${day}/${month}/${year}\n${hours}:${minutes}:${seconds}`
+    }
 
     return (
         <div className="mt-10 mx-auto flex justify-between w-1200px min-h-250px h-450px">
@@ -25,7 +39,7 @@ const History = () => {
                     </div>
 
                     {printHistList.length > 0 && printHistList.map(oneRow => (
-                        <>
+                        <div key={oneRow.id}>
                             <div className="grid grid-cols-5 gap-4">
                                 <span className="text-gray-500">{oneRow.timestamp}</span>
                                 <span className="">{oneRow.fileName}</span>
@@ -34,7 +48,7 @@ const History = () => {
                                 <span className="text-yellow-500 font-bold ">{oneRow.remainingPaper}</span>
                             </div>
                             <hr className="my-2"/>
-                        </>
+                        </div>
                     ))}
 
                     
@@ -50,15 +64,15 @@ const History = () => {
                         <span className="">Tổng tiền</span>
                     </div>
 
-                    {buyHistList.length > 0 && buyHistList.map(oneRow => (
-                        <>
+                    {buyHistList.length > 0 && buyHistList.slice().reverse().map(oneRow => (
+                        <div key={oneRow.id}>
                             <div className="grid grid-cols-3 gap-4">
-                                <span className="">{oneRow.timestamp}</span>
-                                <span className="text-green-500 font-bold">+{oneRow.quantity}</span>
+                                <span className="">{paymentDate(oneRow.createdAt)}</span>
+                                <span className="text-green-500 font-bold">+{`${parseInt(oneRow.cost / 200)} tờ`}</span>
                                 <span className="text-red-500 font-bold">-{formatter.format(oneRow.cost)} </span>
                             </div>
                             <hr className="my-3"/>
-                        </>
+                        </div>
                     ))}
 
                 </div>

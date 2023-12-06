@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useContext, useState } from 'react'
 import UserContext from './assets/UserContext';
 import './index.css';
-import { useNavigate } from 'react-router-dom';
 
 const Form = () => {
     const [isRegister, setIsRegister] = useState(false);
@@ -10,8 +9,7 @@ const Form = () => {
     const [password, setPassword] = useState('');
     const [signUpStatus, setSignUpStatus] = useState('');
     const [signInStatus, setSignInStatus] = useState('');
-    const {setUsername:setLoggedInUsername, token, setToken} = useContext(UserContext);
-    const navigate = useNavigate()
+    const {setToken} = useContext(UserContext);
 
     //Send form
 
