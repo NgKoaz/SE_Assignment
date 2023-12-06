@@ -14,13 +14,20 @@ const Uploader = ({ step, setStep, file, setFile, selectedId, setSelectedId }) =
     function handleSelection(e, id){
         e.preventDefault()
         setSelectedId(id)
-        console.log(selectedId)
     }
 
     function handleDeletion(e, id){
         e.preventDefault()
         e.stopPropagation()
         setDeleteId(id)
+    }
+
+    function displayShorter(str, maxLen){
+        if (str.length > maxLen){
+            const truncatedString = str.substring(0, (maxLen - 3)) + '...';
+            return truncatedString;
+        }
+        return str
     }
 
     async function requestDeletion(e){
@@ -86,7 +93,7 @@ const Uploader = ({ step, setStep, file, setFile, selectedId, setSelectedId }) =
             >
                 <div className="left flex items-center gap-3">
                     <span className="bg-blue-500 w-12 px-1 py-1 rounded-xl text-white text-base text-center font-semibold">{fileType}</span>
-                    <h3 className="text-base font-semibold">{fileName}</h3>
+                    <h3 className="text-base font-semibold" title={fileName}>{displayShorter(fileName, 33)}</h3>
                 </div>
                 <div className="right flex items-center">
                     <button 

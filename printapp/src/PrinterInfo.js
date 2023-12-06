@@ -5,14 +5,15 @@ const PrinterInfo = ({id, name, location, isActive, paperEstimate, TaskCount, se
 
     function handleClick(e){
         e.preventDefault()
-        setSelectedPrinter({id: id, name: `${location}-${name}`})  
+        if (!isActive) return
+        setSelectedPrinter({id: id, name: `${location}-${name}`})
     }
 
   return (
     <div 
         id={id}
         onClick={e => handleClick(e)}
-        className={`m-3 h-44 w-96 bg-white rounded-2xl flex flex-col justify-between shadow-xl ${selectedPrinter.id === id ? "border-4 border-dashed border-indigo-600" : ""}`}
+        className={`m-3 h-44 w-96 bg-white rounded-2xl flex flex-col justify-between shadow-xl ${selectedPrinter.id === id ? "border-4 border-dashed border-indigo-600" : ""} ${!isActive ? "opacity-60" : ""}`}
     >
         <div className="flex justify-between p-3">
             <label className="text-3xl font-semibold">{`${location}-${name}`}</label>

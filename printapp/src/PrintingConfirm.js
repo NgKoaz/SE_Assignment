@@ -3,30 +3,15 @@ import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import UserContext from './assets/UserContext'
 
-const PrintingConfirm = ({step, setStep, file, numCopies, orientation, size, selectedId, selectedPrinter }) => {
+const PrintingConfirm = ({step, setStep, numCopies, orientation, size, selectedId, selectedPrinter }) => {
     const [openConfModal, setOpenConfModal] = useState(false)
     const [openSucModal, setOpenSucModal] = useState(false)
-    const { token, loadPrintingHistList, getUserInfo, loadPrinterList  } = useContext(UserContext)
-    const navigate = useNavigate()
+    const [error, setError] = useState('')
+    const { token, loadPrintingHistList, getUserInfo, loadPrinterList, fileList, paper  } = useContext(UserContext)
 
-    function handleClick(e){
-        e.preventDefault()
-        const clickedButton = e.target
-        switch (clickedButton.id){
-            case "printing":
-                //Open confirmation modal
-                setOpenConfModal(true)
-                break
-            case "buying":
-                navigate('/buying')
-                break
-            case "back":
-                setStep(step - 1)
-                break
-            default:
-                navigate('/errorpage')
-        }
-    }
+    const [file, setFile] = useState(fileList.filter(file => file.id === selectedId)[0])
+
+    const navigate = useNavigate()
 
     function handleConfirmation(event){
         setOpenConfModal(false)
@@ -50,13 +35,22 @@ const PrintingConfirm = ({step, setStep, file, numCopies, orientation, size, sel
                 loadPrinterList()
                 getUserInfo()
             }, 700)
-            
+            setOpenSucModal(true)
         })
         .catch(error => {
-            console.log("Print fail!")
+            if (error.response){
+                switch(error.response.status){
+                    case 400:
+                        setError("Lỗi file hoặc không đủ giấy!")
+                        break
+                    case 404:
+                        setError("Không File hoặc máy in không tồn tại!")
+                        break
+                    default:
+                        setError("Lỗi server")
+                }
+            }
         })
-                                
-        setOpenSucModal(true)
     }
 
     function lineLayout(left_str, right_str){
@@ -105,8 +99,9 @@ const PrintingConfirm = ({step, setStep, file, numCopies, orientation, size, sel
             <div className="w-100vw h-100vh fixed flex justify-center">
                 <div className="absolute bg-black w-full h-full opacity-60"></div>
                 <div className="h-250px w-400px mx-auto mt-20 bg-white rounded flex flex-col items-center justify-around z-20">
-                    <div>
-                        <p id="body-modal" className="text-xl text-center">Hệ thống đã tiếp nhận<br />Hãy đến máy in đã chọn.</p>
+                    <div className='text-xl text-center font-semibold'>
+                        <p id="body-modal">Hệ thống đã tiếp nhận yêu cầu</p>
+                        <p id="body-modal">Vui lòng đến máy in "{selectedPrinter.name}"</p>
                     </div>
                     <div id="footer-modal" className="flex gap-12">
                         <button
@@ -125,6 +120,26 @@ const PrintingConfirm = ({step, setStep, file, numCopies, orientation, size, sel
         )
     }
 
+    function Bill(){
+        return(
+            <div>
+                {lineLayout("Địa điểm máy in", selectedPrinter.name)}
+                {lineLayout("Hướng giấy", (orientation === 'portrait') ? "Dọc" : "Ngang" )}
+                {lineLayout("Loại giấy", size)}
+                <hr className="mt-2 mb-2 border-gray-300" />
+
+                {lineLayout("Số lượng trang cho mỗi bản sao", file.paper )}
+                {lineLayout("Tổng số bản sao cần in", numCopies)}
+                <hr className="mt-2 mb-2 border-gray-300" />
+                {lineLayout("Tổng số trang cần in", - file.paper * numCopies)}
+                {lineLayout("Tổng số trang hiện tại", paper)}
+                <hr className="mt-2 mb-2 border-gray-300" />
+
+                {lineLayout("Còn lại", paper - file.paper * numCopies)}
+            </div>
+        )
+    }
+
 
   return (
     <div className="flex">
@@ -132,39 +147,38 @@ const PrintingConfirm = ({step, setStep, file, numCopies, orientation, size, sel
             <h1 className="mb-4 text-xl font-mono font-semibold ">Xác nhận in</h1>
             <hr className="mt-2 mb-2 border-gray-300" />
 
-            <div>
-                {lineLayout("Địa điểm máy in", selectedPrinter.name)}
-                {lineLayout("Hướng giấy", (orientation === 'portrait') ? "Dọc" : "Ngang" )}
-                {lineLayout("Loại giấy", size)}
-                <hr className="mt-2 mb-2 border-gray-300" />
+            <Bill />
 
-                {lineLayout("Số lượng trang cho mỗi bản sao", "20")}
-                {lineLayout("Tổng số bản sao cần in", numCopies)}
-                {lineLayout("Tổng số trang cần in", "100")}
-                {lineLayout("Tổng số trang hiện tại", "200")}
-                <hr className="mt-2 mb-2 border-gray-300" />
-
-                {lineLayout("Còn lại", "100")}
-
-            </div>
+            {error && (
+                <div className="text-red-500 font-semibold">
+                    {error}
+                </div>
+            )}
+            
             <div className="mt-3 flex flex-col gap-3 items-center">
                 <button 
                     id="printing"
-                    onClick={e => handleClick(e)}
+                    onClick={e => {
+                        if (paper - file.paper * numCopies < 0){
+                            setError("Không đủ giấy")
+                            return
+                        }
+                        setOpenConfModal(true)
+                    }}
                     className="bg-indigo-600 w-full p-2 rounded-2xl text-white text-lg font-semibold hover:opacity-70"
                 >
                     Tiến hành in
                 </button>
                 <button 
                     id="buying"
-                    onClick={e => handleClick(e)}
+                    onClick={e => navigate('/buying')}
                     className="bg-purple-600 w-full p-2 rounded-2xl text-white text-lg font-semibold hover:opacity-70"
                 >
                     Mua thêm giấy
                 </button>
                 <button 
                     id="back"
-                    onClick={e => handleClick(e)}
+                    onClick={e => setStep(step - 1)}
                     className="bg-red-600 w-full p-2 rounded-2xl text-white text-lg font-semibold hover:opacity-70"
                 >
                     Quay về

@@ -66,8 +66,6 @@ const Form = () => {
         event.preventDefault();
         if (isRegister) signUp();
         else signIn();
-        //setLoggedInUsername(data.username);
-        //navigate('/')
     }
 
     function handleClickChangeForm(event){
@@ -75,7 +73,8 @@ const Form = () => {
         setIsRegister(!isRegister);
         setUsername('');
         setPassword('');
-        console.log(isRegister);
+        setSignUpStatus('')
+        setSignInStatus('')
     }
 
 
@@ -93,7 +92,10 @@ const Form = () => {
                             id="username"
                             type="text"
                             value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            onChange={(e) => {
+                                setUsername(e.target.value)
+                                setSignInStatus('')
+                            }}
                             placeholder="Username"
                             required 
                             className="border-2 w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600"
@@ -104,7 +106,10 @@ const Form = () => {
                             id="password"
                             type="password"
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e) => {
+                                setPassword(e.target.value)
+                                setSignInStatus('')
+                            }}
                             placeholder="Password"
                             required 
                             className="border-2 w-full text-base px-2 py-1  focus:outline-none focus:ring-0 focus:border-gray-600"
@@ -115,9 +120,7 @@ const Form = () => {
                             <input id="remember" type="checkbox" checked={isRemember} onChange={e => setIsRemember(!isRemember)} />
                             <label htmlFor="remember" className="text-base ml-2">Lưu đăng nhập</label>
                         </div>
-                        <div className="text-indigo-500 font-semibold">
-                        Quên mật khẩu?
-                        </div>
+                        
                     </div>
                     <div className="mt-5">
                         <input 
@@ -154,7 +157,10 @@ const Form = () => {
                             id="username"
                             type="text"
                             value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            onChange={(e) => {
+                                setUsername(e.target.value)
+                                setSignUpStatus('')
+                            }}
                             placeholder="Username"
                             required 
                             className="border-2 w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600"
@@ -165,7 +171,10 @@ const Form = () => {
                             id="password"
                             type="password"
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e) => {
+                                setPassword(e.target.value)
+                                setSignUpStatus('')
+                            }}
                             placeholder="Password"
                             required 
                             className="border-2 w-full text-base px-2 py-1  focus:outline-none focus:ring-0 focus:border-gray-600"

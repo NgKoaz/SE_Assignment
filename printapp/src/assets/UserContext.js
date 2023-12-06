@@ -116,7 +116,6 @@ export function UserContextProvider({children}){
             } else {
                 setPrinterList([...response.data.list].sort((a, b) => b.ActiveStatus - a.ActiveStatus))
                 console.log(printerList)
-                console.log("Get printer successfully!")
             }
         })
         .catch(error => {
@@ -195,7 +194,8 @@ export function UserContextProvider({children}){
 
     return(
         <UserContext.Provider value={{ 
-            username, setUsername, fileList, setFileList, 
+            username, setUsername,
+            fileList, setFileList, 
             printerList, printHistList, buyHistList, 
             token, setToken, loadPrintingHistList,
             loadPrinterList, 

@@ -27,6 +27,7 @@ const Printing = () => {
         return (
             <SelectPrinter 
                 step={step} setStep={setStep} 
+                selectedId={selectedId}
                 numCopies={numCopies} setNumCopies={setNumCopies} 
                 selectedPrinter={selectedPrinter} setSelectedPrinter={setSelectedPrinter} 
                 orientation={orientation} setOrientation={setOrientation}

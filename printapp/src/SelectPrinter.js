@@ -4,6 +4,7 @@ import UserContext from './assets/UserContext'
 
 const SelectPrinter = ({ 
         step, setStep, numCopies, setNumCopies, 
+        selectedId,
         selectedPrinter, setSelectedPrinter, 
         orientation, setOrientation,
         size, setSize
@@ -11,25 +12,26 @@ const SelectPrinter = ({
 
     const [error, setError] = useState('')
 
-    const { printerList } = useContext(UserContext)
+    const { fileList, printerList } = useContext(UserContext)
 
     function handleClick(e){
         e.preventDefault()
-        const clickedButton = e.target
-        
-        switch (clickedButton.id){
-            case "back":
-                setStep(step - 1)
-                break
-            case "continue":
-                if (!selectedPrinter){
-                    setError("Vui lòng chọn máy in")
-                    return
-                }
-                setStep(step + 1)
-                break
-            default:
+        if (!selectedPrinter.id){
+            setError("Vui lòng chọn máy in")
+            return
+        } else if (selectedPrinter.id) {
+            const printer = printerList.filter(printer => printer.id === selectedPrinter.id)[0]
+            const file = fileList.filter(file => file.id === selectedId)[0]
+            if (!file) {
+                setError("File bị lỗi vui lòng quay về chọn lại File!")
+                return
+            }
+            if (printer.Papers < numCopies * file.paper){
+                setError("Máy in thiếu giấy! Vui lòng chọn máy khác!")
+                return
+            }
         }
+        setStep(step + 1)
     }
 
   return (
@@ -100,7 +102,7 @@ const SelectPrinter = ({
                 <div className="buttons flex justify-between mt-8">
                     <button 
                         id="back"
-                        onClick={e => handleClick(e)}
+                        onClick={e => setStep(step - 1)}
                         className="bg-red-600 w-1/6 h-12 rounded-2xl text-white text-xl font-semibold hover:opacity-70">
                         Quay về
                     </button >
