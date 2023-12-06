@@ -10,7 +10,7 @@ const History = () => {
         currency: 'VND'
     });
 
-    function paymentDate(str){
+    function formatDate(str){
         const dateObject = new Date(str)
 
         const addLeadingZero = (number) => (number < 10 ? `0${number}` : number);
@@ -41,10 +41,10 @@ const History = () => {
                     {printHistList.length > 0 && printHistList.map(oneRow => (
                         <div key={oneRow.id}>
                             <div className="grid grid-cols-5 gap-4">
-                                <span className="text-gray-500">{oneRow.timestamp}</span>
+                                <span className="text-gray-500">{formatDate(oneRow.createdAt)}</span>
                                 <span className="">{oneRow.fileName}</span>
                                 <span className="">{oneRow.copies}</span>
-                                <span className="text-red-500 font-bold">-{oneRow.printedPaper}</span>
+                                <span className="text-red-500 font-bold">-{oneRow.paperUsed}</span>
                                 <span className="text-yellow-500 font-bold ">{oneRow.remainingPaper}</span>
                             </div>
                             <hr className="my-2"/>
@@ -67,7 +67,7 @@ const History = () => {
                     {buyHistList.length > 0 && buyHistList.slice().reverse().map(oneRow => (
                         <div key={oneRow.id}>
                             <div className="grid grid-cols-3 gap-4">
-                                <span className="">{paymentDate(oneRow.createdAt)}</span>
+                                <span className="">{formatDate(oneRow.createdAt)}</span>
                                 <span className="text-green-500 font-bold">+{`${parseInt(oneRow.cost / 200)} tờ`}</span>
                                 <span className="text-red-500 font-bold">-{formatter.format(oneRow.cost)} </span>
                             </div>

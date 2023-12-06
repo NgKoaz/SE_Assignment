@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import UserContext from './assets/UserContext';
 import History from './History'
 import Printing from './Printing'

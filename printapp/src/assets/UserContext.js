@@ -24,6 +24,28 @@ export function UserContextProvider({children}){
         setPaper(userInfo.paper) 
     }, [userInfo])
 
+    function setCookie(name, value, daysToExpire) {
+        const date = new Date();
+        date.setTime(date.getTime() + daysToExpire * 24 * 60 * 60 * 1000);
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    }
+        
+    function getCookie(name) {
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const cookies = decodedCookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i];
+            while (cookie.charAt(0) === ' ') {
+            cookie = cookie.substring(1);
+            }
+            if (cookie.indexOf(name + "=") === 0) {
+            return cookie.substring(name.length + 1, cookie.length);
+            }
+        }
+        return null;
+    }
+
     async function getUserInfo(){
         if (!token) {
             setUserInfo(null)
@@ -39,25 +61,24 @@ export function UserContextProvider({children}){
                 setUserInfo(null);
             } else {
                 setUserInfo(response.data.user);
-                console.log(response.data.user)
                 console.log("Get user Info success");
             }
         })
         .catch(error => {
-            if (error.response) {
-            // Request đã được gửi, và server trả về status code không 2xx
-                console.error('Error response:', error.response.data);
-                console.error('Status code:', error.response.status);
-            } else if (error.request) {
-            // Request đã được gửi nhưng không có phản hồi từ server
-                console.error('No response received:', error.request);
-            } else {
-            // Có lỗi xảy ra khi thiết lập request
-                console.error('Error setting up the request:', error.message);
+            if (error.response){
+                switch (error.response.status){
+                    case 404:
+                        setCookie('token', '', 1)
+                        setToken('')
+                        break
+                    default:
+                        console.log("Lỗi từ server!")
+                }
             }
         })
     }
 
+    
     async function loadFileList(){
         if (!token) return
         axios.get('/file/get/', {
@@ -69,8 +90,8 @@ export function UserContextProvider({children}){
             if (!response.data.list) {
                 console.log("File list hasn't found!")
             } else {
-                setFileList(response.data.list);
-                console.log(response.data.list);
+                setFileList(response.data.list.reverse());
+                console.log(response.data.list) 
                 console.log("File list success");
             }
         })
@@ -84,7 +105,7 @@ export function UserContextProvider({children}){
 
     async function loadPrinterList(){
         if (!token) return
-        axios.get('/printer/', {
+        axios.get('/printer/list', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -93,8 +114,8 @@ export function UserContextProvider({children}){
             if (!response.data.list) {
                 console.log("Printer list hasn't found!")
             } else {
-                setPrinterList(response.data.list);
-                console.log(response.data.list);
+                setPrinterList([...response.data.list].sort((a, b) => b.ActiveStatus - a.ActiveStatus))
+                console.log(printerList)
                 console.log("Get printer successfully!")
             }
         })
@@ -141,7 +162,6 @@ export function UserContextProvider({children}){
                 console.log("Buying history list hasn't found!")
             } else {
                 setBuyHistList(response.data.list);
-                console.log(response.data.list);
                 console.log("Get buying list success");
             }
         })
@@ -152,14 +172,7 @@ export function UserContextProvider({children}){
         })
     }
 
-    useEffect(()=>{
-        setToken(localStorage.getItem('accessToken'))
-        
-    }, [])
-
-    useEffect(() => {
-        getUserInfo()
-
+    async function loadAllList(){
         // Load file List
         loadFileList()
         // Load printer list
@@ -168,15 +181,27 @@ export function UserContextProvider({children}){
         loadPrintingHistList()
         // Load buying history list
         loadBuyingHistList()
+    }
+
+    useEffect(()=>{
+        setToken(getCookie("token"))
+    }, [])
+
+    useEffect(() => {
+        getUserInfo()
+
+        loadAllList()
     }, [token]);
 
     return(
         <UserContext.Provider value={{ 
             username, setUsername, fileList, setFileList, 
             printerList, printHistList, buyHistList, 
-            token, setToken,
+            token, setToken, loadPrintingHistList,
+            loadPrinterList, 
             loadFileList, loadBuyingHistList,
-            paper, getUserInfo
+            loadAllList,
+            paper, getUserInfo, setCookie,
         }}>
             {children}
         </UserContext.Provider>

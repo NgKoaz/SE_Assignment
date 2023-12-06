@@ -10,17 +10,30 @@ const Form = () => {
     const [signUpStatus, setSignUpStatus] = useState('');
     const [signInStatus, setSignInStatus] = useState('');
     const {setToken} = useContext(UserContext);
-
+    const [isSignUpError, setIsSignUpError] = useState(false);
+    const [isRemember, setIsRemember] = useState(true)
+    const { setCookie } = useContext(UserContext)
     //Send form
 
     async function signUp(){
         let url = "/user/signup";
         try {
-            const {data} = await axios.post(url, {userName: username, password});
+            await axios.post(url, {userName: username, password});
             setSignUpStatus("Sign up successfully!");
+            setIsSignUpError(false)
         } catch (error) {
-            if (error.response && error.response.status === 400){
-                setSignUpStatus("Username already exists!");
+            setIsSignUpError(true)
+            if (error.response){
+                switch (error.response.status){
+                    case 400:
+                        setSignUpStatus("Tên tài khoản đã tồn tại!")
+                        break
+                    case 500:
+                        setSignUpStatus("Lỗi từ máy chủ!")
+                        break
+                    default:
+                        setSignUpStatus("Lỗi bất thường! Vui lòng thao tác lại.")
+                }
             }
         }
     }
@@ -30,13 +43,21 @@ const Form = () => {
         try {
             const {data} = await axios.post(url, {userName: username, password});
             if (data && data.token){
-                localStorage.setItem('accessToken', data.token)
-                //setSignInStatus("Sign in successfully!");
+                if (isRemember) setCookie('token', data.token, 30)
+                else setCookie('token', data.token, 1)
+
                 setToken(data.token)
             }
         } catch (error) {
-            if (error.response && error.response.status === 400){
-                setSignInStatus("Username already exists!");
+            if (error.response){
+                switch (error.response.status){
+                    case 400:
+                    case 404:
+                        setSignInStatus("Sai tài khoản hoặc mật khẩu!")
+                        break
+                    default:
+                        setSignInStatus("Lỗi bất thường! Vui lòng thao tác lại.")
+                }
             }
         }
     }
@@ -63,53 +84,60 @@ const Form = () => {
         {(isRegister === false) ? 
         (
             <div className="w-500px p-6 shadow-1g bg-white rounded-lg">
-                <h1 className="text-4xl block text-center font-semibold">Login</h1>
+                <h1 className="text-4xl block text-center font-semibold">Đăng nhập</h1>
                 <hr className="mt-3 mb-3"/>
                 <form method="post" onSubmit={handleSummit}>
                     <div>
-                        <label htmlFor="username" className="block text-base mb-2 font-semibold">Username</label>
+                        <label htmlFor="username" className="block text-base mb-2 font-semibold">Tài khoản</label>
                         <input 
                             id="username"
                             type="text"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            placeholder="Your username"
+                            placeholder="Username"
                             required 
                             className="border-2 w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600"
                             />
                         <br />
-                        <label htmlFor="password" className="block text-base my-2 font-semibold">Password</label>
+                        <label htmlFor="password" className="block text-base my-2 font-semibold">Mật khẩu</label>
                         <input 
                             id="password"
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Your Password"
+                            placeholder="Password"
                             required 
                             className="border-2 w-full text-base px-2 py-1  focus:outline-none focus:ring-0 focus:border-gray-600"
                         />
                     </div>
                     <div className="mt-3 flex justify-between items-center">
                         <div>
-                        <input id="remember" type="checkbox" />
-                        <label htmlFor="remember" className="text-base ml-2">Remember me</label>
+                            <input id="remember" type="checkbox" checked={isRemember} onChange={e => setIsRemember(!isRemember)} />
+                            <label htmlFor="remember" className="text-base ml-2">Lưu đăng nhập</label>
                         </div>
                         <div className="text-indigo-500 font-semibold">
-                        Forgot Password?
+                        Quên mật khẩu?
                         </div>
                     </div>
                     <div className="mt-5">
                         <input 
                             type="submit"
-                            value="Login" 
+                            value="Đăng nhập" 
                             className="border-4 border-indigo-700 bg-indigo-700 text-xl text-white py-2 px-5 rounded-lg w-full font-semibold hover:opacity-70"
                         />
                     </div>
                 </form>
-                {signInStatus && <div>{signInStatus}</div>}
+
+                {signInStatus && 
+                    <div className="py-2 font-semibold text-red-500" >
+                        {signInStatus}
+                    </div>
+                }
+
+
                 <div className="mt-10 w-full flex">
                     <div className="text-gray-400 w-full text-sm text-center">
-                        Not have an account? <button onClick={handleClickChangeForm} className="text-indigo-600 underline italic">Create an account</button>
+                        Chưa có tài khoản? <button onClick={handleClickChangeForm} className="text-indigo-600 underline italic">Đăng kí tài khoản</button>
                     </div>
                 </div>
             </div>
@@ -117,44 +145,50 @@ const Form = () => {
         :
         (
             <div className="w-500px p-6 shadow-1g bg-white rounded-lg">
-                <h1 className="text-4xl block text-center font-semibold">Register</h1>
+                <h1 className="text-4xl block text-center font-semibold">Đăng kí tài khoản</h1>
                 <hr className="mt-3 mb-3"/>
                 <form method="post" onSubmit={handleSummit}>
                     <div>
-                        <label htmlFor="username" className="block text-base mb-2 font-semibold">Username</label>
+                        <label htmlFor="username" className="block text-base mb-2 font-semibold">Tài khoản</label>
                         <input 
                             id="username"
                             type="text"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            placeholder="Your username"
+                            placeholder="Username"
                             required 
                             className="border-2 w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600"
                             />
                         <br />
-                        <label htmlFor="password" className="block text-base my-2 font-semibold">Password</label>
+                        <label htmlFor="password" className="block text-base my-2 font-semibold">Mật khẩu</label>
                         <input 
                             id="password"
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Your Password"
+                            placeholder="Password"
                             required 
                             className="border-2 w-full text-base px-2 py-1  focus:outline-none focus:ring-0 focus:border-gray-600"
                         />
                     </div>
-                    <div className="mt-5">
+                    <div className="mt-8">
                         <input 
                             type="submit"
-                            value="Sign up" 
+                            value="Đăng kí" 
                             className="border-4 border-indigo-700 bg-indigo-700 text-xl text-white py-2 px-5 rounded-lg w-full font-semibold hover:opacity-70"
                         />
                     </div>        
                 </form>
-                {signUpStatus && <div>{signUpStatus}</div>}
+
+                {signUpStatus && 
+                    <div className={`py-2 font-semibold ${(isSignUpError) ? "text-red-500" : "text-green-500"}`} >
+                        {signUpStatus}
+                    </div>
+                }
+
                 <div className="mt-10 w-full flex">
                     <div className="text-gray-400 w-full text-sm text-center">
-                        Already have an account? <button onClick={handleClickChangeForm} className="text-indigo-600 underline italic">Sign in here</button>
+                        Đã có tài khoản? <button onClick={handleClickChangeForm} className="text-indigo-600 underline italic">Đăng nhập ở đây</button>
                     </div>
                 </div>
             </div>

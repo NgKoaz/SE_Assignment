@@ -6,19 +6,28 @@ import axios from 'axios'
 const Buying = () => {
     const [numberPaper, setnumberPaper] = useState('')
     const [error, setError] = useState("")
+    const [openConfModal, setOpenConfModal] = useState(false)
+    const [openSucModal, setOpenSucModal] = useState(false)
     const { token, loadBuyingHistList, getUserInfo } = useContext(UserContext)
+      
 
     function handleInput(e){
         const val = e.target.value
-        if (val > 5000) {
-            setError("Chỉ được mua tối đa 5000 trang cho mỗi lần giao dịch");
-        } else {
-            setnumberPaper(e.target.value)
-            setError("")
+        if (isNaN(val)){
+            setError("Chỉ nhập được chữ số")
+            return
         }
+        if (val > 500) {
+            setError("Chỉ được mua tối đa 500 trang cho mỗi lần giao dịch")
+            return
+        }
+    
+        setnumberPaper(e.target.value)
+        setError("")
+        
     }
 
-    async function handleClick(e){
+    async function makePayment(e){
         e.preventDefault()
         axios.post('/user/purchase', {paper: numberPaper}, {
             headers: {
@@ -28,11 +37,14 @@ const Buying = () => {
             console.log("Successfully!")
             loadBuyingHistList()
             setTimeout(getUserInfo, 10)
+            setOpenConfModal(false)
+            setOpenSucModal(true)
         }).catch((err) => {
             if (err.status === 500){
                 console.log("Server's error")
             }
         })
+        setOpenConfModal(false)
     }
 
     function getPriceStr(){
@@ -45,6 +57,63 @@ const Buying = () => {
         
         return formatter.format(price);
     }
+
+    function ConfirmationModal(){
+        return(
+            <div className="w-100vw h-100vh fixed flex justify-center z-30">
+                <div className="absolute bg-black w-full h-full opacity-60"></div>
+                <div className="h-250px w-400px mx-auto mt-20 bg-white rounded flex flex-col items-center justify-around z-20">
+                    <div>
+                        <h2 id="title-modal" className="text-2xl font-semibold">Xác nhận thanh toán</h2>
+                    </div>
+                    <div>
+                        <p id="body-modal" className="text-xl">Thanh toán số tiền {getPriceStr()}</p>
+                    </div>
+                    <div id="footer-modal" className="flex gap-12">
+                        <button
+                            onClick={e => setOpenConfModal(false)}
+                            className="bg-red-500 text-base font-bold text-white py-2 px-3 rounded-lg"
+                        >
+                            Hủy
+                        </button>
+                        <button
+                            className="bg-blue-500 text-base font-bold text-white py-2 px-3 rounded-lg"
+                            onClick={makePayment}
+                        >
+                            Xác nhận thanh toán
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+
+    function SuccessNotification(){
+        return(
+            <div className="w-100vw h-100vh fixed flex justify-center">
+                <div className="absolute bg-black w-full h-full opacity-60"></div>
+                <div className="h-250px w-400px mx-auto mt-20 bg-white rounded flex flex-col items-center justify-around z-20">
+                    <div>
+                        <p id="body-modal" className="text-lg text-center">Mua thành công: {numberPaper} tờ <br /> Tổng tiền là: {getPriceStr()}</p>
+                    </div>
+                    <div id="footer-modal" className="flex gap-12">
+                        <button
+                            className="bg-blue-500 text-base font-bold text-white py-2 px-3 rounded-lg"
+                            onClick={e => {
+                                setnumberPaper('')
+                                setOpenSucModal(false)
+                            }}
+                        >
+                            Đóng
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+
 
   return (
     <div className="relative flex justify-center gap-5">
@@ -63,10 +132,10 @@ const Buying = () => {
                     <br />
                     {error && <p className="text-red-500 text-bases">{error}</p>}
                     <label className="text-base font-semibold">Hình thức thanh toán</label>
-                    <div name="payment_method" className="flex justify-between border-2 bg-white w-32 p-2 mt-2 mb-4 border-black rounded-lg">
-                        <input type="checkbox" value="Momo" defaultChecked />
-                        <div>Momo</div>
-                        <img src="./momo_logo.png" alt="Momo Pay" className="w-12 h-12" />
+                    <div name="payment_method" className="flex justify-between border-2 bg-white w-40 p-2 mt-2 mb-4 border-black rounded-lg">
+                        <input type="checkbox" value="Momo" checked={true} />
+                        <div>BKPay</div>
+                        <img src="./app_bkpay.png" alt="BK Pay" className="w-20 h-12" />
                     </div>
                 </form>
             </div>  
@@ -85,14 +154,21 @@ const Buying = () => {
                         <div className="text-lg font-semibold mb">{getPriceStr()}</div>
                     </div>
                     <button 
-                        onClick={e => handleClick(e)}
+                        onClick={e => {
+                            if (!numberPaper) {
+                                setError("Nhập số lượng cần mua trước")
+                                return
+                            }
+                            setOpenConfModal(true)
+                        }}
                         className="mt-5 border-4 border-indigo-600 bg-indigo-600 w-full text-base font-semibold text-white px-3 py-3 rounded-xl hover:opacity-70">
                         Thanh toán {getPriceStr()}
                     </button>
                 </div>
             </div>
-
-        </div>  
+        </div>
+        {openConfModal && <ConfirmationModal />}
+        {openSucModal && <SuccessNotification />}
     </div>
   )
 }

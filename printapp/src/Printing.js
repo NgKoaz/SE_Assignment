@@ -9,8 +9,7 @@ const Printing = () => {
     const [selectedId, setSelectedId] = useState('')
 
     const [numCopies, setNumCopies] = useState(1)
-    const [selectedPrinter, setSelectedPrinter] = useState(null)
-    const [isAutoSelect, setIsAutoSelect] = useState(true)
+    const [selectedPrinter, setSelectedPrinter] = useState({id: null, name: null})
     const [orientation, setOrientation] = useState('portrait')
     const [size, setSize] = useState('A4')
 
@@ -29,8 +28,7 @@ const Printing = () => {
             <SelectPrinter 
                 step={step} setStep={setStep} 
                 numCopies={numCopies} setNumCopies={setNumCopies} 
-                selectedPrinter={selectedPrinter} setSelectedPrinter={setSelectedPrinter}
-                isAutoSelect={isAutoSelect} setIsAutoSelect={setIsAutoSelect} 
+                selectedPrinter={selectedPrinter} setSelectedPrinter={setSelectedPrinter} 
                 orientation={orientation} setOrientation={setOrientation}
                 size={size} setSize={setSize}
             />
@@ -41,9 +39,9 @@ const Printing = () => {
                 step={step} setStep={setStep} 
                 file={file} setFile={setFile} 
                 numCopies={numCopies} setNumCopies={setNumCopies} 
+                selectedId={selectedId}
                 selectedPrinter={selectedPrinter}
                 setSelectedPrinter={setSelectedPrinter} 
-                isAutoSelect={isAutoSelect} setIsAutoSelect={setIsAutoSelect}
                 orientation={orientation} setOrientation={setOrientation}
                 size={size} setSize={setSize}
 

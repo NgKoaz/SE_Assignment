@@ -3,10 +3,10 @@ import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import UserContext from './assets/UserContext'
 
-const PrintingConfirm = ({step, setStep, file, numCopies, orientation, size, selectedId }) => {
+const PrintingConfirm = ({step, setStep, file, numCopies, orientation, size, selectedId, selectedPrinter }) => {
     const [openConfModal, setOpenConfModal] = useState(false)
     const [openSucModal, setOpenSucModal] = useState(false)
-    const { token } = useContext(UserContext)
+    const { token, loadPrintingHistList, getUserInfo, loadPrinterList  } = useContext(UserContext)
     const navigate = useNavigate()
 
     function handleClick(e){
@@ -30,13 +30,13 @@ const PrintingConfirm = ({step, setStep, file, numCopies, orientation, size, sel
 
     function handleConfirmation(event){
         setOpenConfModal(false)
-
+        console.log(selectedId)
         axios.post('/order/create/', {
-            printerId: 1,
+            printerId: selectedPrinter.id,
             fileId: selectedId,
             copies: numCopies,
             isPortrait: ((orientation === 'portrait') ? true : false),
-            isA4: ((size === 'A4') ? true : false),
+            isA4: ((size === 'A4') ? true : false)
         },
         {
             headers: {
@@ -45,9 +45,15 @@ const PrintingConfirm = ({step, setStep, file, numCopies, orientation, size, sel
         })
         .then(response => {
             console.log("Print success")
+            setTimeout(() => {
+                loadPrintingHistList()
+                loadPrinterList()
+                getUserInfo()
+            }, 700)
+            
         })
         .catch(error => {
-           
+            console.log("Print fail!")
         })
                                 
         setOpenSucModal(true)
@@ -127,7 +133,7 @@ const PrintingConfirm = ({step, setStep, file, numCopies, orientation, size, sel
             <hr className="mt-2 mb-2 border-gray-300" />
 
             <div>
-                {lineLayout("Địa điểm máy in", "H6-105")}
+                {lineLayout("Địa điểm máy in", selectedPrinter.name)}
                 {lineLayout("Hướng giấy", (orientation === 'portrait') ? "Dọc" : "Ngang" )}
                 {lineLayout("Loại giấy", size)}
                 <hr className="mt-2 mb-2 border-gray-300" />

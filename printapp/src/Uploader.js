@@ -8,11 +8,13 @@ const Uploader = ({ step, setStep, file, setFile, selectedId, setSelectedId }) =
     
     const [error, setError] = useState("")
     const [deleteId, setDeleteId] = useState(null)
+    const [filterStr, setFilterStr] = useState('')
     const { fileList, token, loadFileList } = useContext(UserContext)
 
     function handleSelection(e, id){
         e.preventDefault()
         setSelectedId(id)
+        console.log(selectedId)
     }
 
     function handleDeletion(e, id){
@@ -128,9 +130,9 @@ const Uploader = ({ step, setStep, file, setFile, selectedId, setSelectedId }) =
 
   return (
     <div className="mx-auto w-500px flex justify-center">
-        <div className="mt-10 w-full bg-white shadow-2xl p-3 rounded-xl">
+        <div className="mt-5 w-full bg-white shadow-2xl p-3 rounded-xl">
             <div>
-                <h2 className="text-center mb-5 text-xl font-semibold">
+                <h2 className="text-center mb-4 text-xl font-semibold">
                     Tải file mới để in
                 </h2>
                 <form onChange={e => handleUpload(e)}>
@@ -146,9 +148,21 @@ const Uploader = ({ step, setStep, file, setFile, selectedId, setSelectedId }) =
                     </label>
                 </form>
                 <div id="filewrapper">
-                    <h3 className="text-xl text-gray-500 font-semibold mt-5 mb-3">File đã tải lên</h3>
+                    <h3 className="text-xl text-gray-500 font-semibold mt-3 mb-2">File đã tải lên</h3>
+                    <input 
+                        type="text" 
+                        placeholder="Tìm kiếm file"
+                        value={filterStr}
+                        onChange={e => {
+                            setFilterStr(e.target.value)
+                        }}
+                        className="text-base border-2 border-gray-300 rounded-lg w-full h-10 mt-1 mb-2 px-2 hover:border-gray-500"
+                    />
                     <div className="pl-2 pr-2 h-80 overflow-y-auto border-2 border-gray-400 rounded-lg">
-                        {fileList.length > 0 && fileList.map(fileInfo => (
+                        {fileList.length > 0 && 
+                        fileList.filter(fileInfo => 
+                            fileInfo.fileName.toLowerCase().includes(filterStr.toLowerCase()))
+                        .map(fileInfo => (
                             <FileBox key={fileInfo.id} id={fileInfo.id} fileName={fileInfo.fileName} fileType={fileInfo.fileName.split(".").pop()} />
                         ))}
                     </div>

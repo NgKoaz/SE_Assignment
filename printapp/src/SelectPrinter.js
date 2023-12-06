@@ -5,7 +5,6 @@ import UserContext from './assets/UserContext'
 const SelectPrinter = ({ 
         step, setStep, numCopies, setNumCopies, 
         selectedPrinter, setSelectedPrinter, 
-        isAutoSelect, setIsAutoSelect,
         orientation, setOrientation,
         size, setSize
     }) => {
@@ -23,7 +22,7 @@ const SelectPrinter = ({
                 setStep(step - 1)
                 break
             case "continue":
-                if (!isAutoSelect && !selectedPrinter){
+                if (!selectedPrinter){
                     setError("Vui lòng chọn máy in")
                     return
                 }
@@ -39,33 +38,6 @@ const SelectPrinter = ({
             <div className="flex gap-10">
                 <form className="w-500px font-mono">
                     <div className="bg-blue-50 rounded-lg p-3 w-full shadow-2xl">
-                        <div className="flex">
-                            <label className="w-2/5 text-xl font-semibold place-self-center">Printer</label>
-                            <ul className="flex gap-12">
-                                <li>
-                                    <input 
-                                        type="radio" 
-                                        name="select_method" 
-                                        id="auto-sel"
-                                        checked={isAutoSelect}
-                                        onChange={e => setIsAutoSelect(true)}
-                                    />
-                                    <label htmlFor="auto-sel" className="ml-2 text-lg">Tự động chọn</label>
-                                </li>
-                                <li>
-                                    <input 
-                                        type="radio" 
-                                        name="select_method" 
-                                        id="man-sel"
-                                        checked={!isAutoSelect}
-                                        onChange={e => setIsAutoSelect(false)}
-                                    />
-                                    <label htmlFor="man-sel" className="ml-2 text-lg">Chọn thủ công</label>
-                                </li>
-                            </ul>
-                        </div>
-                        <br />
-
                         <div className="flex">
                             <label className="w-2/5 text-xl font-semibold place-self-center">Số lượng bản sao</label>
                             <input 
@@ -107,14 +79,16 @@ const SelectPrinter = ({
                     </div>
                 </form>
             
-                <div className={`h-450px w-850px bg-blue-50 rounded-xl grid grid-cols-2 shadow-2xl overflow-y-auto border-2 border-blue-50 ${isAutoSelect ? "opacity-50 pointer-events-none" : ""}`}>
+                <div className={`h-450px w-850px bg-blue-50 rounded-xl grid grid-cols-2 shadow-2xl overflow-y-auto border-2 border-blue-50 `}>
                     {printerList.length > 0 && printerList.map(printer => (
                         <PrinterInfo 
                             key={printer.id}
-                            id={printer.id} 
-                            isActive={printer.isActive}
-                            paperEstimate={printer.paperEstimate}
-                            numUsing={printer.numUsing}
+                            id={printer.id}
+                            name={printer.Name}
+                            location={printer.Location}
+                            isActive={printer.ActiveStatus}
+                            paperEstimate={printer.Papers}
+                            TaskCount={printer.TaskCount}
                             selectedPrinter={selectedPrinter}
                             setSelectedPrinter={setSelectedPrinter}
                         />
