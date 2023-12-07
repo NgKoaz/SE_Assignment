@@ -46,7 +46,7 @@ const History = () => {
                         <span className="">Địa điểm</span>
                     </div>
 
-                    {printHistList.length > 0 && printHistList.map(oneRow => (
+                    {printHistList.length > 0 && printHistList.slice().reverse().map(oneRow => (
                         <div key={oneRow.id}>
                             <div className="grid grid-cols-5 gap-4">
                                 <span className="text-gray-500">{formatDate(oneRow.createdAt)}</span>
