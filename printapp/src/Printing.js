@@ -7,7 +7,7 @@ const Printing = () => {
     const [step, setStep] = useState(1)
     const [file, setFile] = useState(null)
     const [selectedId, setSelectedId] = useState('')
-
+    const [side, setSide] = useState(2)
     const [numCopies, setNumCopies] = useState(1)
     const [selectedPrinter, setSelectedPrinter] = useState({id: null, name: null})
     const [orientation, setOrientation] = useState('portrait')
@@ -32,6 +32,7 @@ const Printing = () => {
                 selectedPrinter={selectedPrinter} setSelectedPrinter={setSelectedPrinter} 
                 orientation={orientation} setOrientation={setOrientation}
                 size={size} setSize={setSize}
+                side={side} setSide={setSide}
             />
         )
         case 3:
@@ -45,6 +46,7 @@ const Printing = () => {
                 setSelectedPrinter={setSelectedPrinter} 
                 orientation={orientation} setOrientation={setOrientation}
                 size={size} setSize={setSize}
+                side={side} setSide={setSide}
 
             />
         )

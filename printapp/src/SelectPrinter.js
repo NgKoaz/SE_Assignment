@@ -7,7 +7,7 @@ const SelectPrinter = ({
         selectedId,
         selectedPrinter, setSelectedPrinter, 
         orientation, setOrientation,
-        size, setSize
+        size, setSize, side, setSide
     }) => {
 
     const [error, setError] = useState('')
@@ -65,9 +65,9 @@ const SelectPrinter = ({
                             </ul>
                         </div>
 
-                        <div className="flex mb-3">
+                        <div className="flex mb-5">
                             <label className="w-2/5 text-xl font-semibold place-self-center">Khổ giấy</label>
-                            <ul className="flex gap-12">
+                            <ul className="flex gap-14">
                                 <li>
                                     <input type="radio" name="paper-size" id="a4" value="a4" checked={size === 'A4'} onChange={e => setSize('A4')} />
                                     <label htmlFor="a4" className="ml-2 text-lg">A4</label>
@@ -75,6 +75,20 @@ const SelectPrinter = ({
                                 <li>
                                     <input type="radio" name="paper-size" id="a3" value="a3" checked={size === 'A3'} onChange={e => setSize('A3')} />
                                     <label htmlFor="a3" className="ml-2 text-lg">A3</label>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div className="flex mb-3">
+                            <label className="w-2/5 text-xl font-semibold place-self-center">Số mặt</label>
+                            <ul className="flex gap-12">
+                                <li>
+                                    <input type="radio" name="paper-side" id="hai-mat" value="hai-mat" checked={side === 2} onChange={e => setSide(2)} />
+                                    <label htmlFor="hai-mat" className="ml-2 text-lg">Hai</label>
+                                </li>
+                                <li>
+                                    <input type="radio" name="paper-side" id="mot-mat" value="mot-mat" checked={side === 1} onChange={e => setSide(1)} />
+                                    <label htmlFor="mot-mat" className="ml-2 text-lg">Một</label>
                                 </li>
                             </ul>
                         </div>

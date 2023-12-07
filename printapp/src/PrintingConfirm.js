@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import UserContext from './assets/UserContext'
 
-const PrintingConfirm = ({step, setStep, numCopies, orientation, size, selectedId, selectedPrinter }) => {
+const PrintingConfirm = ({step, setStep, numCopies, orientation, size, selectedId, selectedPrinter, side, setSide }) => {
     const [openConfModal, setOpenConfModal] = useState(false)
     const [openSucModal, setOpenSucModal] = useState(false)
     const [error, setError] = useState('')
@@ -15,11 +15,12 @@ const PrintingConfirm = ({step, setStep, numCopies, orientation, size, selectedI
 
     function handleConfirmation(event){
         setOpenConfModal(false)
-        console.log(selectedId)
+        //console.log(selectedId)
         axios.post('/order/create/', {
             printerId: selectedPrinter.id,
             fileId: selectedId,
             copies: numCopies,
+            side: side,
             isPortrait: ((orientation === 'portrait') ? true : false),
             isA4: ((size === 'A4') ? true : false)
         },
@@ -67,7 +68,7 @@ const PrintingConfirm = ({step, setStep, numCopies, orientation, size, selectedI
     function ConfirmationModal(){
         return(
             <div className="w-100vw h-100vh fixed flex justify-center">
-                <div className="absolute bg-black w-full h-full opacity-60"></div>
+                <div className="absolute bg-black w-full h-full opacity-90"></div>
                 <div className="h-250px w-400px mx-auto mt-20 bg-white rounded flex flex-col items-center justify-around z-20">
                     <div>
                         <h2 id="title-modal" className="text-2xl font-semibold">Xác nhận in</h2>
@@ -97,7 +98,7 @@ const PrintingConfirm = ({step, setStep, numCopies, orientation, size, selectedI
     function SuccessNotification(){
         return(
             <div className="w-100vw h-100vh fixed flex justify-center">
-                <div className="absolute bg-black w-full h-full opacity-60"></div>
+                <div className="absolute bg-black w-full h-full opacity-90"></div>
                 <div className="h-250px w-400px mx-auto mt-20 bg-white rounded flex flex-col items-center justify-around z-20">
                     <div className='text-xl text-center font-semibold'>
                         <p id="body-modal">Hệ thống đã tiếp nhận yêu cầu</p>
@@ -121,21 +122,32 @@ const PrintingConfirm = ({step, setStep, numCopies, orientation, size, selectedI
     }
 
     function Bill(){
+        let paperNeed = 0
+        if (side === 2) {
+            paperNeed = Math.ceil(file.paper / 2.0)
+        } else {
+            paperNeed = file.paper
+        }
+        console.log(paperNeed * numCopies)
+        
+        if (size !== "A4") paperNeed *= 2
         return(
             <div>
                 {lineLayout("Địa điểm máy in", selectedPrinter.name)}
                 {lineLayout("Hướng giấy", (orientation === 'portrait') ? "Dọc" : "Ngang" )}
                 {lineLayout("Loại giấy", size)}
+                {lineLayout("Số mặt", side)}
                 <hr className="mt-2 mb-2 border-gray-300" />
 
                 {lineLayout("Số lượng trang cho mỗi bản sao", file.paper )}
+                {lineLayout("Số lượng giấy A4 cho mỗi bản sao", paperNeed )}
                 {lineLayout("Tổng số bản sao cần in", numCopies)}
                 <hr className="mt-2 mb-2 border-gray-300" />
-                {lineLayout("Tổng số trang cần in", - file.paper * numCopies)}
+                {lineLayout("Tổng số trang cần in", - paperNeed * numCopies)}
                 {lineLayout("Tổng số trang hiện tại", paper)}
                 <hr className="mt-2 mb-2 border-gray-300" />
 
-                {lineLayout("Còn lại", paper - file.paper * numCopies)}
+                {lineLayout("Còn lại", paper - paperNeed * numCopies)}
             </div>
         )
     }

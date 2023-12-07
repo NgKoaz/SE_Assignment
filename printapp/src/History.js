@@ -38,20 +38,22 @@ const History = () => {
             <div id="printing-history" className="w-750px bg-white rounded-2xl p-3 shadow-2xl">
                 <h2 className="text-xl font-semibold text-center mb-3">Lịch sử in</h2>
                 <div id="printed-list" className="h-96 text-base flex flex-col gap-2 overflow-y-auto">
-                    <div className="sticky top-0 bg-white grid grid-cols-4 gap-4 italic text-gray-500">
+                    <div className="sticky top-0 bg-white grid grid-cols-5 gap-4 italic text-gray-500">
                         <span className="">Ngày in</span>
                         <span className="">Tên file</span>
                         <span className="">Số bản sao</span>
                         <span className="">Giấy đã in</span>
+                        <span className="">Địa điểm</span>
                     </div>
 
                     {printHistList.length > 0 && printHistList.map(oneRow => (
                         <div key={oneRow.id}>
-                            <div className="grid grid-cols-4 gap-4">
+                            <div className="grid grid-cols-5 gap-4">
                                 <span className="text-gray-500">{formatDate(oneRow.createdAt)}</span>
-                                <span className="" title={oneRow.fileName}>{displayShorter(oneRow.fileName, 18)}</span>
+                                <span className="" title={oneRow.fileName}>{displayShorter(oneRow.fileName, 15)}</span>
                                 <span className="">{oneRow.copies}</span>
                                 <span className="text-red-500 font-bold">-{oneRow.paperUsed}</span>
+                                <span className="">{oneRow.location}</span>
                             </div>
                             <hr className="my-2"/>
                         </div>

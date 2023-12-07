@@ -59,7 +59,7 @@ const NavBar = () => {
 
   return (
     <>
-        <nav className="h-20 w-full sticky top-0 flex justify-between border-b-2 border-black bg-gray-200 z-20">
+        <nav className="h-20 w-full sticky top-0 flex justify-between border-b-2 border-black bg-white z-20">
             <div className="flex ">
                 <div className="ml-20 mr-10 px-2 py-2">
                     <Logo />
@@ -101,7 +101,7 @@ const NavBar = () => {
                         {username}
                     </div>
                     <div className="text-green-500">
-                        Còn lại: {paper} trang
+                        Còn lại: {paper} tờ
                     </div>
                     <button 
                         onClick={e => setOpenConfModal(true)}
