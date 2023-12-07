@@ -35,8 +35,11 @@ const Buying = () => {
             }
         }).then((res) => {
             console.log("Successfully!")
-            loadBuyingHistList()
-            setTimeout(getUserInfo, 10)
+            
+            setTimeout(() => {
+                loadBuyingHistList()
+                getUserInfo()
+            }, 250)
             setOpenConfModal(false)
             setOpenSucModal(true)
         }).catch((err) => {

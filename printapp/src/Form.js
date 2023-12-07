@@ -19,7 +19,7 @@ const Form = () => {
         let url = "/user/signup";
         try {
             await axios.post(url, {userName: username, password});
-            setSignUpStatus("Sign up successfully!");
+            setSignUpStatus("Đăng kí tài khoản thành công!");
             setIsSignUpError(false)
         } catch (error) {
             setIsSignUpError(true)

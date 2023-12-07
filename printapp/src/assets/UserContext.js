@@ -61,7 +61,7 @@ export function UserContextProvider({children}){
                 setUserInfo(null);
             } else {
                 setUserInfo(response.data.user);
-                console.log("Get user Info success");
+                //console.log("Get user Info success");
             }
         })
         .catch(error => {
@@ -91,8 +91,8 @@ export function UserContextProvider({children}){
                 console.log("File list hasn't found!")
             } else {
                 setFileList(response.data.list.reverse());
-                console.log(response.data.list) 
-                console.log("File list success");
+                //console.log(response.data.list) 
+                //console.log("File list success");
             }
         })
         .catch(error => {
@@ -115,7 +115,7 @@ export function UserContextProvider({children}){
                 console.log("Printer list hasn't found!")
             } else {
                 setPrinterList([...response.data.list].sort((a, b) => b.ActiveStatus - a.ActiveStatus))
-                console.log(printerList)
+                //console.log(printerList)
             }
         })
         .catch(error => {
@@ -135,11 +135,11 @@ export function UserContextProvider({children}){
         })
         .then(response => {
             if (!response.data.list) {
-                console.log("Printing history list hasn't found!")
+                //console.log("Printing history list hasn't found!")
             } else {
                 setPrintHistList(response.data.list);
-                console.log(response.data.list);
-                console.log("Get printing list success");
+                //console.log(response.data.list);
+                //console.log("Get printing list success");
             }
         })
         .catch(error => {
@@ -161,7 +161,7 @@ export function UserContextProvider({children}){
                 console.log("Buying history list hasn't found!")
             } else {
                 setBuyHistList(response.data.list);
-                console.log("Get buying list success");
+                //console.log("Get buying list success");
             }
         })
         .catch(error => {

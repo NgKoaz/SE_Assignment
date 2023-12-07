@@ -7,13 +7,13 @@ import Logo from './Logo';
 const NavBar = () => {
     const [openConfModal, setOpenConfModal] = useState(false)
     const [isRefreshing, setRefreshing] = useState(false)
-    const { username, paper, setToken, getUserInfo, loadAllList } = useContext(UserContext);
+    const { username, paper, setToken, getUserInfo, loadAllList, setCookie } = useContext(UserContext);
     const navigate = useNavigate()
 
     function handleLogOut(event){
         setOpenConfModal(false)
         setToken('');
-        localStorage.setItem('accessToken', '')
+        setCookie('token', '', 1)
         navigate('/')
         getUserInfo()        
     }
