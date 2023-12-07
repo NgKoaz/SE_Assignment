@@ -42,10 +42,10 @@ const PrintingConfirm = ({step, setStep, numCopies, orientation, size, selectedI
             if (error.response){
                 switch(error.response.status){
                     case 400:
-                        setError("Lỗi file hoặc không đủ giấy!")
+                        setError("Máy in không đủ giấy!")
                         break
                     case 404:
-                        setError("Không File hoặc máy in không tồn tại!")
+                        setError("Không thấy File hoặc máy in không tồn tại!")
                         break
                     default:
                         setError("Lỗi server")
@@ -128,9 +128,9 @@ const PrintingConfirm = ({step, setStep, numCopies, orientation, size, selectedI
         } else {
             paperNeed = file.paper
         }
-        console.log(paperNeed * numCopies)
         
         if (size !== "A4") paperNeed *= 2
+
         return(
             <div>
                 {lineLayout("Địa điểm máy in", selectedPrinter.name)}
@@ -171,7 +171,15 @@ const PrintingConfirm = ({step, setStep, numCopies, orientation, size, selectedI
                 <button 
                     id="printing"
                     onClick={e => {
-                        if (paper - file.paper * numCopies < 0){
+                        let paperNeed = 0
+                        if (side === 2) {
+                            paperNeed = Math.ceil(file.paper / 2.0)
+                        } else {
+                            paperNeed = file.paper
+                        }
+                        if (size !== "A4") paperNeed *= 2
+                        
+                        if (paper - paperNeed * numCopies < 0){
                             setError("Không đủ giấy")
                             return
                         }

@@ -26,7 +26,16 @@ const SelectPrinter = ({
                 setError("File bị lỗi vui lòng quay về chọn lại File!")
                 return
             }
-            if (printer.Papers < numCopies * file.paper){
+
+            let paperNeed = 0
+            if (side === 2) {
+                paperNeed = Math.ceil(file.paper / 2.0)
+            } else {
+                paperNeed = file.paper
+            }
+            if (size !== "A4") paperNeed *= 2
+
+            if (printer.Papers < numCopies * paperNeed){
                 setError("Máy in thiếu giấy! Vui lòng chọn máy khác!")
                 return
             }

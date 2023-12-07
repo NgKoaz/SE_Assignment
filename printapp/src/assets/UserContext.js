@@ -138,7 +138,7 @@ export function UserContextProvider({children}){
                 //console.log("Printing history list hasn't found!")
             } else {
                 setPrintHistList(response.data.list);
-                console.log(response.data.list);
+                //console.log(response.data.list);
                 //console.log("Get printing list success");
             }
         })
