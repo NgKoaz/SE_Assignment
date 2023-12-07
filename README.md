@@ -200,62 +200,10 @@ Mô tả: \
 Có 4 component chính là User, PrintRequest, PrintService và PrintHistory. Cũng như module Buy Paper thì việc tiến hành yêu cầu in ấn này (component PrintRequest) sẽ cần biết thông tin về người đang thực hiện in ấn thông qua chính tài khoản của họ. Sau khi đã thực hiện đầy đủ các bước như tải tài liệu lên và thiết lập xong cấu hình in ấn thì người dùng sẽ bấm nút xác nhận in, cũng chính là provide cho component PrintService. Sau khi đã nhận được yêu cầu xác nhận in thì component PrintService sẽ thực hiện việc in ấn tài liệu đã được yêu cầu và sau đó tiến hành lưu lại thông tin in ấn của User (component PrintHistory).
 
 
-## Task 4: Implementation - Sprint 1
-### 4.1: Thiết lập không gian làm việc và quản lý
+## Task 4 and 5: Implementation
+### Thiết lập không gian làm việc và quản lý
 Nhóm đã thống nhất chọn Github làm àm nền tảng quản lý và phát triển dự án. \
 Workspace của nhóm: https://github.com/NgKoaz/SE_Assignment 
-
-### 4.2: Thêm các tệp chứa, thư mục chứa, tài liệu vào dự án
-![image](https://github.com/NgKoaz/SE_Assignment/assets/146020231/b51cc762-b8b1-4de8-9759-d67f0c8d4caa) \
-Kho chứa của nhóm gồm các thư mục sau:
-- document: folder chứa các tài liệu liên quan đến Requirement, System modelling, Architectural design của dự án
-- pic: folder chứa các file hình ảnh liên quan của dự án
-- printapp: mã nguồn hiện thực dự án
-
-### 4.3: Tiến hành kiểm thử với giao diện người dùng đã phát triển
-#### Các người thực hiện kiểm thử (Tester):
-Vì giới hạn về mặt thời gian và nhân lực phát triển phần mềm nên nhóm dự án lựa chọn phương án tuyển những người tham gia là những người bạn bè của các thành viên trong nhóm. Qua quá trình tuyển chọn, nhóm chọn được 29 tester là những sinh viên, có trình độ sử dụng máy tính cơ bản và đã từng sử dụng các ứng dụng, dịch vụ in ấn.
-
-#### Mô tả sơ lược công việc của các Tester:
-- Công việc 1: Kiểm tra thông tin trên trang chủ
-- Công việc 2: Kiểm tra chức năng In của phần mềm
-- Công việc 3: Kiểm tra chức năng Mua giấy của phần mềm
-
-#### Kế hoạch kiểm thử:
-Nhóm thống nhất lựa chọn phương pháp định lượng và remote thu thập feedback cũng như tiến hành test. Trong quá trình thực hiện bài test, các Testers được yêu cầu record lại quá trình thực hiện của mình. Sau đó gửi link video lại cho nhóm và tiếp tục làm thêm 1 khảo sát thông qua Google Form. Khảo sát này sẽ các câu hỏi liên quan đến mức độ hài lòng, đánh giá, góp ý,... Từ đó nhóm sẽ phân tích và đánh giá những thông tin thu thập được và cải tiến lại UI. 
-
-Phương pháp Định lượng: nhóm thu thập đánh giá theo thang điểm từ 1 → 5 (1 là thấp nhất và 5 là cao nhất), các thông số như thời gian hoàn thành tasks, mức độ hoàn thành cũng như là các vấn đề liên quan đến việc đánh giá giao diện của nhóm cũng như mức độ dễ sử dụng của các tính năng,... 
-
-Remote: UI sẽ được gửi cho Testers và Testers sẽ tiến hành thực hiện các tasks từ xa. Trong quá trình thực hiện Testers cần record lại quá trình thực hiện.
-
-#### Kết quả kiểm thử:
-- Đánh giá mức độ hoàn thành các công việc \
-  Các mức từ 1 - 5 được biểu diễn bằng chữ như sau: \
-  1: Hoàn thành rất ít, công việc chỉ hoàn thành được dưới 10% nhiệm vụ đề ra. \
-  2: Hoàn thành ít, công việc hoàn thành được khoảng từ 10% đến dưới 40% nhiệm vụ đề ra. \
-  3: Hoàn thành chưa đầy đủ, công việc hoàn thành được khoảng từ 40% đến dưới 70% nhiệm vụ đề ra. \
-  4: Hoàn thành tương đối, công việc hoàn thành được khoảng từ 70% đến dưới 95% nhiệm vụ đề ra. \
-  5: Hoàn thành tốt, công việc hoàn thành được 95% đến 100% nhiệm vụ đề ra. \
- ![chart1](https://github.com/NgKoaz/SE_Assignment/assets/146020231/bf262607-303e-4465-b4d3-06096c8192ce) 
- ![chart2](https://github.com/NgKoaz/SE_Assignment/assets/146020231/22e5d564-c6b2-4901-8943-a96bf4e49fa6) 
- ![chart3](https://github.com/NgKoaz/SE_Assignment/assets/146020231/3e6d3df4-41f3-4d6d-8800-aee39894a664) \
-Nhận xét: Các công việc có mức độ hoàn thành tương đối khả quan.
-- Đánh giá về công việc khiến người dùng mất nhiều thời gian nhất: \
-  ![pie](https://github.com/NgKoaz/SE_Assignment/assets/146020231/133c09ac-8548-4195-8d36-d641e8cc1c23) \
-  Nhận xét:
-  * Công việc 3 khiến người dùng mất nhiều thời gian nhất.
-  * Thời gian người dùng thao tác ở công việc 1 và 2 tương đối thấp.
-- Đánh giá mức độ hài lòng của người dùng về giao diện của phần mềm: \
-   ![pie1](https://github.com/NgKoaz/SE_Assignment/assets/146020231/b5af3be7-220d-4ee9-a430-8c694dd9d6b7) \
-  Nhận xét:
-  * Đa số các Tester cảm thấy rất thích giao diện mà nhóm đã thiết kế.
-  * Có một số ít cho rằng giao diện sẽ rất khó thực hiện vì có nhiều chi tiết khá cầu kì.
-
-- Đánh giá mức độ đơn giản trong việc sử dụng phần mềm: \
-  ![pie2](https://github.com/NgKoaz/SE_Assignment/assets/146020231/a65d4db1-41f9-46bb-ad15-6278969910a8) \
-  Nhận xét:
-  * Phần lỡn các Tester cảm thấy giao diện rất phổ thông và dễ sử dụng, không có quá nhiều chi tiết khó hiểu.
-  * Vẫn còn một số ít cho rằng giao diện khó thao tác.
 
   
 
