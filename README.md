@@ -1,3 +1,9 @@
+## Turorial Run ##
+Document: https://docs.google.com/document/d/17dZnKYfcwUOW4F7rXK40jRomqnyUQ1FJl01Kzy0ICyY/edit
+Video demo: https://www.youtube.com/watch?v=RQsP_Zet-eo
+
+
+
 # SE_Assignment - HK231
 **Team** Nhóm 06\
 **Task 1**  Requirement elicitation\
